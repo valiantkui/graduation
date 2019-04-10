@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="./css/foundation.min.css">
+    <script src="js/vendor/jquery.js"></script>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+
+
+    <style>
+
+        .unfoces{
+
+            height: 100%;
+
+            overflow: hidden;
+
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $(document).foundation();
+        });
+        $.ajaxSetup({
+            xhrFields: {
+                //允许带上凭据
+                withCredentials: true
+            },
+            crossDomain: true
+        });
+
+
+
+
+    </script>
+
+
+    <script>
+
+        var numPerPage = 15;
+        var currentPage = 1;
+        var currentType = "时政";
+
+        var currentSearchContent;
+        var isSearch = false;
+
+        var div1Class = "cell small-12 medium-4 padding_vertical";
+        var div2Class = "grid-x";
+
+       $(document).ready(function(){
+          getNews(currentType,1);
+
+          initialisePagination();
+       });
+
+       function initialisePagination(){
+           var url = "/news/getNewsNumByType?type="+currentType;
+           if(isSearch)
+               //如果正在搜索时，
+               url = "/news/getSearchNewsNum?searchContent="+currentSearchContent;
+
+           $.ajax({
+              url: url,
+               type:"get",
+               dataType: "text",
+               success: function(result){
+                  alert(result);
+                 var allPages = parseInt(result)/15;
+                 doInitialisePagination(allPages);
+               },
+               error: function (e) {
+                   alert("错误-分页");
+               }
+
+
+           });
+       }
+       function doInitialisePagination(allPages){
+        /*如果allPages<7,则从1开始，到allPages结束
+        *如果currentPage-3小于等于0m则分页 从1开始到7
+        * 如果currentPage-3大于0，则从currentPagen-3开始到currentPage+3结束
+        * 如果currentPage+3大于allPages,allPages-6开始，allPages
+        * */
+        $(".pagination").empty();
+        $(".pagination").append('<li class="pagination-previous" id="previous"><a href="javascript:previousPage()">上一页</a></li>');
+        $(".pagination").append('<li class="pagination-next" id="next"><a href="javascript:nextPage()">下一页</a></li>');
+        if(currentPage<=1) $("#previous").addClass("disabled").html("上一页");
+
+        if(currentPage>=allPages) $("#next").addClass("disabled").html("下一页");
+
+        if(allPages<7){
+            for(var i = 1;i<=allPages;i++){
+                if(currentPage == i){
+                    //表示当前页，不可点击
+                    $("#nextPage").before('<li class="current">'+i+'</li>');
+
+                }else{
+                    $("#nextPage").before('<li><a href="javascript:changeCurrentPage(this)" aria-label="Page 3">'+i+'</a></li>');
+                }
+            }
+            return ;
+        }
+        var starter = -1;
+        var end ;
+            if(currentPage-3 <= 0){
+                starter = 1;
+            }else if(currentPage+3<=allPages){
+                starter = currentPage-3;
+            }else{
+                starter = allPages-6;
+            }
+            for(var i = 0;i<7;i++){
+                var current = i+starter;
+
+                if(currentPage == current){
+                    //表示当前页，不可点击
+                    $("#nextPage").before('<li class="current">'+current+'</li>');
+
+                }else{
+                    $("#nextPage").before('<li><a href="javascript:changeCurrentPage('+current+')" >'+current+'</a></li>');
+                }
+            }
+       }
+        function loadNews(newsList){
+
+            $("#content").empty();
+
+
+            for(var i = 0;i<newsList.length;i++){
+
+                    var news = newsList[i];
+
+                    var div1 = document.createElement("div");
+                    $(div1).addClass(div1Class);
+                    var div2 = document.createElement("div");
+                    $(div2).addClass(div2Class);
+
+
+                    var div3_content = document.createElement("div");
+
+                    var div3_img = document.createElement("div");
+                    if(news.img_url=="" || news.img_url==null){
+                        $(div3_content).addClass("cell small-12 medium-12").css({height:"100%"});
+                        $(div3_img).addClass("cell small-12 medium-12").css({overflow:"hidden"});
+                    }else{
+
+                        $(div3_content).addClass("cell small-9 medium-12").css({height:"100%"});
+                        $(div3_img).addClass("cell small-3 medium-12").css({overflow:"hidden"}).append('<img src="'+news.img_url+'"/>');
+                    }
+
+
+                    var div4_title = document.createElement("div");
+                    $(div4_title).addClass("cell small-9").append('<h4>'+news.title+'</h4>');
+
+
+                    var div4_other = document.createElement("div");
+                    $(div4_other).addClass("cell small-3 grid-x");
+
+                    var div5_original = document.createElement("div");
+
+                    $(div5_original).addClass("cell auto").append(news.origin);
+
+                    var div5_time = document.createElement("div");
+                    $(div5_time).addClass("cell auto").append(news.publish_date);
+
+                    $(div1).append(div2);
+                    $(div2).append(div3_img,div3_content);
+                    $(div3_content).append(div4_title,div4_other);
+                    $(div4_other).append(div5_original,div5_time);
+
+                    $(div1).css({borderBottom:"1px solid",borderColor:"#E6E6FA"});
+
+
+                    $(div1).click({"n_no":news.n_no,"title":news.title,"author":news.author,"news_text":news.news_text},showNewsInfo);
+                    $("#content").append(div1);
+            }
+        }
+
+
+
+        function getNews(type,currentPage){
+
+
+
+            $.ajax({
+               url: "/news/findNewsByType",
+                dataType: "text",
+                data: {"type":type,"currentPage":currentPage,"numPerPage":numPerPage},
+                success: function (result) {
+                    if(result != ""){
+                        var newsList = $.parseJSON(result);
+                        loadNews(newsList);
+
+                        currentType=type;
+                    }
+
+                },
+                error: function (e) {
+                    alert("错误")
+                }
+
+            });
+        }
+
+
+
+        function changeCurrentPage(t){
+
+
+            currentPage = t;
+           if(isSearch){
+               doSearchNews(currentSearchContent,currentPage);
+               initialisePagination();
+               return;
+           }
+            //alert(currentPage);
+            getNews(currentType,currentPage);
+            initialisePagination();
+        }
+
+        function nextPage(){
+           currentPage++;
+
+            if(isSearch){
+                doSearchNews(currentSearchContent,currentPage);
+                initialisePagination();
+                return;
+            }
+            getNews(currentType,currentPage);
+            initialisePagination();
+        }
+
+        function previousPage(){
+            currentPage--;
+            if(isSearch){
+                doSearchNews(currentSearchContent,currentPage);
+                initialisePagination();
+                return;
+            }
+            getNews(currentType,currentPage);
+            initialisePagination();
+        }
+
+        function showNewsInfo(d){
+           $.ajax({
+               url: "/news/loadNewsContent?n_no="+d.data.n_no,
+               dataType: "text",
+              type: "get",
+               success: function (result) {
+                   if(result != ""){
+                       var maxw = document.documentElement.clientWidth;
+                       var maxh = document.documentElement.clientHeight;
+                       $("#news_info").css({"backgroundColor":"white","position":"fixed",width:maxw+"px",height:maxh+"px","top":"50%","left":"50%","margin-left":(-maxw/2)+"px","margin-top":(-maxh/2)+"px"});
+                       $("#news_info").show();
+                       $("html").addClass("unfoces");
+                       $("body").addClass("unfoces");
+                       $("#news_info_title").text(d.data.title);
+                       $("#news_info_author").text(d.data.author);
+                       $("#news_info_content").html(result);
+                   }
+               },
+               error: function (e) {
+                   alert("错误")
+               }
+           });
+        }
+
+
+        function searchNews(){
+           currentPage = 1;
+           isSearch = true;
+            currentSearchContent = $("#search_content").val();
+           initialisePagination();
+
+           doSearchNews(currentSearchCxontent,currentPage);
+
+        }
+
+        function doSearchNews(searchContent,currentPage){
+
+           alert("searchContent:"+searchContent+",,currentPage:"+currentPage);
+            $.ajax({
+                url: "/news/searchNews",
+                dataType: "text",
+                data: {"searchContent":searchContent,"currentPage":currentPage,"numPerPage":numPerPage},
+                success: function (result) {
+                    alert(result);
+                    if(result != ""){
+                        var newsList = $.parseJSON(result);
+                        loadNews(newsList);
+
+
+                        isSearch = true;
+                    }
+
+                },
+                error: function (e) {
+                    alert("错误")
+                }
+
+            });
+
+
+
+        }
+
+        function closePanel(){
+            $('#news_info').fadeOut(500);
+            $("html").removeClass("unfoces");
+
+            $("body").removeClass("unfoces");
+        }
+    </script>
+
+    <style>
+
+        .unfoces{
+
+            height: 100%;
+
+            overflow: hidden;
+
+        }
+    </style>
+</head>
+<body>
+<div id="header">
+    <script>$("#header").load("nav.html")</script>
+</div>
+<!--hah-->
+
+    <div class="grid-container  fluid margin_top" >
+
+        <div id="content" class="grid-x grid-margin-x grid-margin-y">
+
+
+
+            <!--div1-->
+            <div class="cell small-12 medium-4 padding_vertical">
+                <!--div2-->
+                <div class="grid-x">
+                    <!--div3_img-->
+                    <div class="cell small-3 medium-12" style="overflow: hidden;">
+                        <img src="./img/yuankui.jpg" width="100%" />
+                    </div>
+                    <!--div3_content-->
+                    <div class="cell small-9 medium-12" style="height: 100%">
+                        <!--div4_title-->
+                        <div class="cell small-9">
+                            <h3>阿里创投管理公司工商变更：张勇不再担任董事长</h3>
+                        </div>
+                        <!--div4_other-->
+                        <div class="cell small-3 grid-x">
+                            <!--div5_original-->
+                            <div class="cell auto">
+                                阿里新闻
+                            </div>
+                            <!--div5_time-->
+                            <div class="cell auto">
+                                12：00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+            <nav aria-label="Pagination" class="margin_top">
+                <ul class="pagination">
+                    <li class="pagination-previous disabled" id="previous">上一页</li>
+                    <li class="current">1</li>
+                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 2">2</a></li>
+                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 3">3</a></li>
+                    <li><a href="###" aria-label="Page 4">4</a></li>
+                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 12">12</a></li>
+                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 13">13</a></li>
+                    <li class="pagination-next" id="next"><a href="#" aria-label="Next page">下一页</a></li>
+                </ul>
+            </nav>
+
+    </div>
+    <div  id="news_info" style="position: fixed; display: none; padding: 1rem;overflow-y: auto;overflow-scrolling: inherit">
+        <div class="text-right" style="position: sticky;position: -webkit-sticky; top: 0px;">
+            <button onclick="closePanel()" class="button success">关闭</button>
+        </div>
+        <h3 id="news_info_title" style="font-weight: bold"></h3>
+
+        <div class="text-right">
+            <kbd id="news_info_author"></kbd>
+        </div>
+        <div id="news_info_content">
+
+
+        </div>
+    </div>
+
+
+    <div id="footer">
+        <script>$("#footer").load("footer.html")</script>
+
+    </div>
+
+</body>
+</html>
+
+<script src="js/vendor/what-input.js"></script>
+<script src="js/vendor/foundation.js"></script>
+<script src="js/app.js"></script>

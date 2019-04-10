@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="kui.eureka_user.dao.UserDao">
+	<select id="findUserById" parameterType="String" resultType="kui.eureka_user.entity.User">
+		select * from user where u_id = #{u_id}
+	</select>
+	
+	
+	<insert id="registerUser" parameterType="kui.eureka_user.entity.User" >
+		insert into user(u_id,name,password,interest_label) 
+		
+		values(#{u_id},#{name},#{password},#{interest_label})
+	
+	</insert>
+</mapper>
+
+
+

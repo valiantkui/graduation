@@ -1,0 +1,80 @@
+    <meta charset="UTF-8">
+    <script>
+        function changeContent(num){
+            currentPage = 1;
+
+            isSearch = false;
+            initialisePagination();
+            switch(num){
+                case 0:
+                    alert("推荐");
+                    break;
+                case 1:
+                   // alert("时政");
+
+                    getNews("时政",currentPage);
+                    break;
+                case 2:
+                   // alert("NBA");
+                    getNews("NBA",currentPage);
+
+                    break;
+                case 3:
+                    //alert("游戏")
+                    getNews("游戏",currentPage);
+                    break;
+                case 4:
+                    //alert("美食")
+                    getNews("美食",currentPage);
+                    break;
+                case 5:
+                    getNews("科技",currentPage);
+                    break;
+                case 6:
+                    getNews("旅游",currentPage);
+                    break;
+            }
+        }
+
+
+
+        function checkSession(){
+            $.ajax({
+               url:"/user/checkSession",
+               type: "get",
+               data: "text",
+               success: function (result) {
+                    alert("checkSession():"+result);
+               } ,
+                error: function (e) {
+                    alert("网络错误");
+                }
+
+            });
+        }
+    </script>
+<div class="title-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="example-menu"></button>
+    <div class="title-bar-title">Menu</div>
+</div>
+<div class="top-bar" id="example-menu">
+    <div class="top-bar-left">
+        <ul class="dropdown menu" data-dropdown-menu>
+            <li class="menu-text">Site Title</li>
+            <li><a href="javascript:changeContent(0);">推荐</a></li>
+            <li><a href="javascript:changeContent(1);">时政</a></li>
+            <li><a href="javascript:changeContent(2);">NBA</a></li>
+            <li><a href="javascript:changeContent(3);">游戏</a></li>
+            <li><a href="javascript:changeContent(4);">美食</a></li>
+            <li><a href="javascript:changeContent(5);">科技</a></li>
+            <li><a href="javascript:changeContent(6);">旅游</a></li>
+            <li><a href="###">登陆</a></li>
+        </ul>
+    </div>
+    <div class="top-bar-right">
+        <ul class="menu">
+            <li><input type="search" id="search_content" placeholder="Search"></li>
+            <li><button type="button" class="button"  onclick="searchNews()">Search</button></li>
+        </ul>
+    </div>
+</div>

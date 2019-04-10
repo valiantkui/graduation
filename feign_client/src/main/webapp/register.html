@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		  <link rel="stylesheet" href="./css/foundation.min.css">
+	  <script src="js/vendor/jquery.js"></script>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+		  
+		  
+		  <script>
+		  		$(document).ready(function() {
+					    $(document).foundation();
+				});
+
+                $.ajaxSetup({
+                    xhrFields: {
+                        //允许带上凭据
+                        withCredentials: true
+                    },
+                    crossDomain: true
+                });
+
+          </script>
+		  
+		  <style>
+		  	div{
+		  		border: 0px solid;
+		  	}
+		  	
+		  	
+		  </style>
+		  
+		  <script>
+
+
+		  	function checkId(){
+
+		  		var u_id = $("#u_id").val().trim();
+				if(""==u_id){
+					return;
+				}
+
+				$.ajax({
+					url: "http://localhost:80/user/checkUserId/"+u_id,
+					type: "get",
+					dataType: "text",
+					success: function (result) {
+						if(result=="true"){
+							cnoOk=true;
+							$("#message_id").text("账号可以使用").css({"color":"green"});
+						}else{
+							cnoOk=false;
+							$("#message_id").text("账号已存在").css({"color":"red"});
+						}
+					},
+					error: function (e) {
+						alert("错误！");
+					}
+				});
+		  		
+		  	}
+
+		  	function doSubmit(){
+
+		  	    var u_id = $("#u_id").val().trim();
+		  	    var name = $("#name").val().trim();
+		  	    var password1 = $("#password1").val().trim();
+		  	    var password2 = $("#password2").val().trim();
+
+
+		  	
+		  	    var isChecked = false;
+		  	    var checkBoxArray = $("input:checkbox");
+		  	    for(var i=0;i<checkBoxArray.length;i++){
+		  	        if(checkBoxArray[i].checked) {
+		  	            isChecked=true;
+		  	            break;
+                    }
+                }
+
+				if(!cnoOk){
+					$("#message").text("账号不可用").css({color:"red"});
+					return false;
+				}
+
+
+		  	    if(u_id=="" || name=="" || password1=="" || password2=="" || !isChecked){
+                    $("#message").text("请输入完整").css({color:"red"});
+                    return false;
+                }
+
+		  	    if(password1 != password2){
+                    $("#message").text("密码不一致，请检查").css({color:"red"});
+                    return false;
+                }
+				var formdata = new FormData(document.getElementById("form"));
+				$.ajax({
+					url: "/user/registerUser",
+					type: "post",
+					data: formdata,
+					dataType: "text",
+					processData: false,
+					contentType: false,
+					success:function(result){
+
+						if(result=="true"){
+							alert("提交成功,您可以尝试登陆");
+							window.location="login.html";
+						}else if(result == "img_false"){
+							alert("图片上传失败");
+						} else if(result == "db_false"){
+
+							alert("数据库更新失败");
+						}else	{
+							alert("异常");
+						}
+					},
+					error:function(e){
+						alert("错误！！");
+					}
+				});
+		  	    return true;
+			}
+		  </script>
+	</head>
+	<body>
+		<div class="grid-container">
+		 	<div class="card" >
+			  <div class="card-divider">
+			  	  注册
+			  </div>
+			  
+			  <div class="card-section">
+			    	<form id="form">
+					  
+					    <div class="grid-x grid-padding-x">
+					      <div class="cell">
+					        <label>账号 <span id="message_id" class="element"></span>
+					          <input type="text" name="u_id" id="u_id" placeholder="请输入账号" onblur="checkId()">
+					        </label>
+					      </div>
+					      
+					       <div class="cell">
+					        <label>昵称
+					          <input type="text" name="name" id="name" placeholder="昵称">
+					        </label>
+					      </div>
+					      <div class="cell">
+					        <label>密码
+					          <input type="password" name="password" id="password1" placeholder="密码">
+					        </label>
+					      </div>
+					        <div class="cell">
+					        <label>再次确认密码
+					          <input type="password" id="password2" placeholder="再次确认密码">
+					        </label>
+					      </div>
+					      
+					       <fieldset class="cell">
+						    <legend>兴趣</legend>
+
+
+						    <input name="interest_label" id="checkbox1" type="checkbox" value="时政"><label for="checkbox1">时政</label>
+						    <input name="interest_label" id="checkbox2" type="checkbox" value="体育"><label for="checkbox2">体育</label>
+						    <input name="interest_label" id="checkbox3" type="checkbox" value="游戏"><label for="checkbox3">游戏</label>
+						    <input name="interest_label" id="checkbox4" type="checkbox" value="美食"><label for="checkbox4">美食</label>
+						    <input name="interest_label" id="checkbox5" type="checkbox" value="科技"><label for="checkbox5">科技</label>
+						    <input name="interest_label" id="checkbox6" type="checkbox" value="旅游"><label for="checkbox6">旅游</label>
+						  </fieldset>
+						  
+						  <div class="cell">
+						  	<input type="button" onclick="doSubmit()" class="button" value="注册" /><span id="message"></span>
+						  	
+						  </div>
+						  
+					      
+					    </div>
+					 
+					</form>
+			  </div>
+			</div>
+		</div>
+		
+	
+	</body>
+</html>
+    	<script src="js/vendor/what-input.js"></script>
+    	<script src="js/vendor/foundation.js"></script>
+ 		<script src="js/app.js"></script>
+

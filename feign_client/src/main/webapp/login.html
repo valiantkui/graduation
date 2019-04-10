@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		  <link rel="stylesheet" href="./css/foundation.min.css">
+	  <script src="js/vendor/jquery.js"></script>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+		  <script>
+		  		$(document).ready(function() {
+					    $(document).foundation();
+				});
+		  </script>
+		  
+		  <style>
+		  	div{
+		  		border: 0px solid;
+		  	}
+		  </style>
+
+		<script>
+
+			function doSubmit(){
+				var u_id = $("#u_id").val().trim();
+				var password = $("#password").val().trim();
+
+				if(u_id=="" || password==""){
+					$("#message").text("请输入完整").css({color:"red"});
+					return false;
+				}
+				$.ajax({
+					url: "/user/loginUser",
+					type: "post",
+					dataType: "text",
+					data: "u_id="+u_id+"&password="+password,
+					success: function (result) {
+						alert(result);
+						if(result=="true"){
+							$("#message").text("登陆成功").css({"color":"green"});
+							window.location="main.html";
+						}else{
+
+							$("#message").text("登陆失败").css({"color":"red"});
+						}
+					},
+					error: function (e) {
+						alert("错误！");
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+	<div class="grid-container margin_top">
+		<div class="card" >
+			<div class="card-divider">
+				登陆
+			</div>
+			<div class="card-section">
+				<form >
+					<div class="grid-x grid-padding-x">
+						<div class="cell">
+							<label>账号 <span id="message_id" class="element"></span>
+								<input type="text" id="u_id" placeholder="请输入账号" >
+							</label>
+						</div>
+						<div class="cell">
+							<label>密码
+								<input type="password" id="password" placeholder="密码">
+							</label>
+						</div>
+						<div class="cell">
+							<input type="button" onclick="doSubmit()" class="button" value="登陆" /><a class="button margin_horizontal">注册</a><span id="message"></span>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	</body>
+</html>
+    	<script src="js/vendor/what-input.js"></script>
+    	<script src="js/vendor/foundation.js"></script>
+ 		<script src="js/app.js"></script>

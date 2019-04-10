@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="kui.eureka_news.dao.NewsDao">
+
+<!--由于news_text数据过长，所以不做传输，只有当用户点击该新闻时再次获取news_text字段  -->
+	<select id="findNewsByType"  resultType="kui.eureka_news.entity.News">
+		select n_no,title,author,img_url,type,origin,origin_url,publish_date,page_view from news
+		 where type = #{type} 
+		 order by n_no desc
+		 limit #{offset},#{numPerPage}
+	</select>
+	
+	<select id="getNewsCount" resultType="int">
+		select count(*) from news
+	</select>
+	
+	<select id="findNewsByN_no" parameterType="int" resultType="kui.eureka_news.entity.News">
+		select * from news 
+		where n_no = #{n_no}
+	</select>
+	
+	<select id="findAllNews" resultType="kui.eureka_news.entity.News">
+		select n_no,title,author,img_url,type,origin,origin_url,publish_date,page_view from news
+	</select>
+	
+	<insert id="insertNewsList" parameterType="java.util.List">
+		insert into news(title,author,news_text,img_url,type,origin,origin_url,publish_date,page_view)
+		values
+		 <foreach collection="newsList" index="index" item="news" separator="," close=";">
+			 (#{news.title},#{news.author},#{news.news_text},#{news.img_url},#{news.type},#{news.origin},#{news.origin_url},#{news.publish_date},#{news.page_view})
+		 </foreach>
+	</insert>
+	<select id="findNewsNumByType" parameterType="String" resultType="int">
+		select count(*) from news
+		where type=#{type}
+	</select>
+	
+	<delete id="deleteNewsByTypeAndNum" >
+		delete from news order by publish_date 
+		where type = #{type} 
+		limit #{limit}
+	
+	</delete>
+</mapper>
+
+
+

@@ -1,0 +1,33 @@
+.bg_dark{
+	background-color: #0C3D5D;
+	color: #F1F1F1;
+}
+.bg_light{
+	background-color: #E1FAEA;
+	color: black;
+}
+
+.content_center{
+	margin: 0px auto;
+}
+.margin_horizontal{
+    margin-left: 2em;
+    margin-right: 2em;
+}
+.margin_vertical{
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+.padding_vertical{
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.padding_horizontal{
+	padding-left: 2em;
+	padding-right: 2em;
+}
+
+.margin_top{
+	margin-top: 3em;
+}
