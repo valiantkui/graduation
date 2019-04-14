@@ -15,6 +15,7 @@ import org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommender
 import org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
 import org.apache.mahout.cf.taste.impl.model.GenericDataModel;
 import org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
@@ -148,6 +149,7 @@ public class TestCase1 {
 	
 	
 	public static void test05() throws Exception{
+
 		 //准备数据 这里是电影评分数据
         File file = new File("D:\\data\\ml-10M100K\\ratings.dat");
         //将数据加载到内存中，GroupLensDataModel是针对开放电影评论数据的
@@ -166,5 +168,28 @@ public class TestCase1 {
         IRStatistics stats = statsEvaluator.evaluate(recommenderBuilder, null, dataModel, null, 4, GenericRecommenderIRStatsEvaluator.CHOOSE_THRESHOLD, 1.0);
         System.out.println(stats.getPrecision());
         System.out.println(stats.getRecall());
+	}
+	
+	public static void test06() throws Exception{
+		
+		
+		        MysqlDataSource dataSource = new MysqlDataSource(); 
+		        dataSource.setServerName("localhost"); 
+		        dataSource.setUser("root"); 
+		        dataSource.setPassword("toor"); 
+		        dataSource.setDatabaseName("mahout"); 
+		                                                                         
+		        JDBCDataModel dataModel = new MySQLJDBCDataModel(dataSource, "intro", "uid", "iid", "val", "time"); 
+		                                                                         
+		        DataModel model = dataModel; 
+		        UserSimilarity similarity=new PearsonCorrelationSimilarity(model); 
+		        UserNeighborhood neighborhood=new NearestNUserNeighborhood(2,similarity,model); 
+		                                                                         
+		        Recommender recommender=new GenericUserBasedRecommender(model,neighborhood,similarity); 
+		                                                                         
+		        List<RecommendedItem> recommendations = recommender.recommend(1, 3); 
+		        for (RecommendedItem recommendation : recommendations) { 
+		            System.out.println(recommendation); 
+		        } 
 	}
 }
