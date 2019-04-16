@@ -1,7 +1,11 @@
 package kui.eureka_recommend;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -21,6 +25,7 @@ import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.model.PreferenceArray;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
@@ -28,12 +33,18 @@ import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
+import com.ibm.icu.text.SimpleDateFormat;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+
+import kui.eureka_recommend.entity.Interest;
+import kui.eureka_recommend.service.InterestService;
+
 public class TestCase1 {
 
 	public static void main(String[] args) {
 		System.out.println("main()");
 		try {
-			test05();
+			insertMoviLen();
 	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -170,16 +181,70 @@ public class TestCase1 {
         System.out.println(stats.getRecall());
 	}
 	
+	/**
+	 * 使用jdbcDataModel来连接数据库  做推荐。
+	 * @throws Exception
+	 */
+	
+	public static void timeTest() {
+		Date date = new Date();
+		
+		date.setTime(1049767738);
+		System.out.println(date);
+	}
+	public static void insertMoviLen() {
+		InterestService interestService = new InterestService();
+		
+		try {
+			File file = new File("D:\\data\\ml-10M100K\\ratings.dat");
+			FileReader fis = new FileReader(file);
+			
+			BufferedReader br = new BufferedReader(fis);
+			String str = null;
+			while((str=br.readLine()) != null) {
+				String[] arr = str.split("::");
+				
+				//UserID::MovieID::Tag::Timestamp
+				
+				String u_id = arr[0] ;
+				int n_no = Integer.parseInt(arr[1]);
+				int val = Integer.parseInt(arr[2]);
+				long timeStamp = Integer.parseInt(arr[3]);
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				
+				String date = sdf.format(new Date(timeStamp));
+				Interest interest = new Interest();
+				interest.setU_id(u_id);
+				interest.setN_no(n_no);
+				interest.setVal(val);
+				interest.setTimestamp(date);
+				
+				interestService.insertInterest(interest);
+				
+			}
+			
+			
+			
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public static void test06() throws Exception{
-		
-		
 		        MysqlDataSource dataSource = new MysqlDataSource(); 
 		        dataSource.setServerName("localhost"); 
 		        dataSource.setUser("root"); 
-		        dataSource.setPassword("toor"); 
+		        dataSource.setPassword("yuankui1209"); 
 		        dataSource.setDatabaseName("mahout"); 
 		                                                                         
-		        JDBCDataModel dataModel = new MySQLJDBCDataModel(dataSource, "intro", "uid", "iid", "val", "time"); 
+		        JDBCDataModel dataModel = new MySQLJDBCDataModel(dataSource, "intro", "uid", "nno", "val", "time"); 
 		                                                                         
 		        DataModel model = dataModel; 
 		        UserSimilarity similarity=new PearsonCorrelationSimilarity(model); 
@@ -188,8 +253,15 @@ public class TestCase1 {
 		        Recommender recommender=new GenericUserBasedRecommender(model,neighborhood,similarity); 
 		                                                                         
 		        List<RecommendedItem> recommendations = recommender.recommend(1, 3); 
+		        
+		        
+		        System.out.println("推荐的内容");
 		        for (RecommendedItem recommendation : recommendations) { 
 		            System.out.println(recommendation); 
 		        } 
+		        
+		        
+		        
+		        
 	}
 }

@@ -21,12 +21,16 @@ public class UserController {
 	@Resource(name="userService")
 	private UserService userService;
 	
+	
+	
 	@RequestMapping("/checkSession")
 	public boolean checkSession(HttpSession session) {
 		String u_id = (String) session.getAttribute("u_id");
 		if(u_id==null || "".equals(u_id)) return false;
 		return true;
 	}
+	
+	
 	
 	@RequestMapping("/checkUserId/{u_id}")
 	public boolean checkUserId(@PathVariable String u_id) {
