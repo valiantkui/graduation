@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>kui</groupId>
-  <artifactId>eureka-recommend</artifactId>
+  <artifactId>eureka-client</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>eureka-recommend</name>
+  <name>eureka-client</name>
   <url>http://maven.apache.org</url>
 
  <parent>
@@ -20,26 +20,30 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		 <mahout.version>0.9</mahout.version>
+        <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
 	</properties>
 
 	<dependencies>
+	
 		<dependency>
 		    <groupId>org.apache.mahout</groupId>
 		    <artifactId>mahout-core</artifactId>
-		    <version>0.7</version>
+		    <version>${mahout.version}</version>
 		</dependency>
-	   <dependency>
-            <groupId>org.apache.mahout</groupId>
-            <artifactId>mahout-examples</artifactId>
-            <version>0.7</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-		
+	   <dependency>            
+	   			<groupId>org.apache.mahout</groupId>     
+	          	<artifactId>mahout-examples</artifactId>   
+                 <version>${mahout.version}</version>  
+        </dependency>       
+        
+         <!--此包与springboot项目冲突，原因是springboot项目自带该包-->  
+         <!--  <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
+        </dependency>  -->
+       
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
@@ -77,16 +81,6 @@
 			<scope>true</scope>
 		</dependency> -->
 		
-	
-	<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core -->
-	<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core -->
-<dependency>
-    <groupId>org.apache.tomcat.embed</groupId>
-    <artifactId>tomcat-embed-core</artifactId>
-    <version>7.0.52</version>
-</dependency>
-
-
 	</dependencies>
 
 	<dependencyManagement>

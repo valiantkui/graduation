@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace映射文件的namespace必须等于Mapper映射器的全限定名 -->
+<mapper namespace="kui.eureka_comment.dao.CommentDao">
+
+<!--由于news_text数据过长，所以不做传输，只有当用户点击该新闻时再次获取news_text字段  -->
+	<insert id="insertComment" parameterType="kui.eureka_comment.entity.Comment">
+	  	insert into comment(n_no,u_id,comment_text,comment_date) values(#{n_no},#{u_id},#{comment_text},#{comment_date})
+	</insert>
+	
+	<select id="findCommentByN_no" parameterType="int" resultType="kui.eureka_comment.entity.Comment">
+		select * from comment 
+		 where n_no = #{n_no}
+	</select>
+</mapper>
+
+
+

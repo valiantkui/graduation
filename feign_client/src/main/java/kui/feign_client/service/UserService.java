@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kui.feign_client.entity.User;
 
 @FeignClient("service-user")
 
@@ -32,4 +36,9 @@ public interface UserService {
 			@RequestParam("u_id") String u_id,
 			@RequestParam("password") String password);
 	
+	@RequestMapping(value="user/getCurrentUser",method=RequestMethod.POST)
+	public User getCurrentUser();
+	
+	@RequestMapping("user/findUserByU_idList")
+	public List<User> findUserByU_idList(@RequestBody List<String> u_idList);
 }

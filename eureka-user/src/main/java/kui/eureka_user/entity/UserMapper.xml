@@ -17,6 +17,15 @@
 		values(#{u_id},#{name},#{password},#{interest_label})
 	
 	</insert>
+	
+	
+	<select id="findUserByU_idList" parameterType="java.util.List" resultType="kui.eureka_user.entity.User">
+		select * from user 
+		where u_id in 
+		 <foreach collection="u_idList" index="index" item="u_id" open="(" separator="," close=")">
+			 #{u_id}
+		 </foreach>
+	</select>
 </mapper>
 
 

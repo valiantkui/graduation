@@ -10,14 +10,12 @@
     <link rel="stylesheet" href="css/app.css">
 
 
+
     <style>
 
         .unfoces{
-
             height: 100%;
-
             overflow: hidden;
-
         }
     </style>
     <script>
@@ -31,80 +29,84 @@
             },
             crossDomain: true
         });
-
-
-
-
     </script>
-
-
     <script>
 
-        var numPerPage = 15;
-        var currentPage = 1;
-        var currentType = "时政";
+        var currentUser;//当前登陆的用户
 
-        var currentSearchContent;
-        var isSearch = false;
+        var numPerPage = 15;//每页显示的新闻数量
+        var currentPage = 1;//当前页，默认为1
+        var currentType = "时政";//当前栏目，默认为时政
+
+        var currentSearchContent;//当前搜索的内容
+        var isSearch = false;//是否搜索了
 
         var div1Class = "cell small-12 medium-4 padding_vertical";
         var div2Class = "grid-x";
 
-       $(document).ready(function(){
-          getNews(currentType,1);
 
-          initialisePagination();
-       });
+        var startTime;//点击一个新闻时的开始时间
 
-       function initialisePagination(){
-           var url = "/news/getNewsNumByType?type="+currentType;
-           if(isSearch)
-               //如果正在搜索时，
-               url = "/news/getSearchNewsNum?searchContent="+currentSearchContent;
-
-           $.ajax({
-              url: url,
-               type:"get",
-               dataType: "text",
-               success: function(result){
-                  alert(result);
-                 var allPages = parseInt(result)/15;
-                 doInitialisePagination(allPages);
-               },
-               error: function (e) {
-                   alert("错误-分页");
-               }
+        var currentNews;//当前在浏览的新闻，如果未浏览，则为空
 
 
-           });
-       }
-       function doInitialisePagination(allPages){
-        /*如果allPages<7,则从1开始，到allPages结束
-        *如果currentPage-3小于等于0m则分页 从1开始到7
-        * 如果currentPage-3大于0，则从currentPagen-3开始到currentPage+3结束
-        * 如果currentPage+3大于allPages,allPages-6开始，allPages
-        * */
-        $(".pagination").empty();
-        $(".pagination").append('<li class="pagination-previous" id="previous"><a href="javascript:previousPage()">上一页</a></li>');
-        $(".pagination").append('<li class="pagination-next" id="next"><a href="javascript:nextPage()">下一页</a></li>');
-        if(currentPage<=1) $("#previous").addClass("disabled").html("上一页");
 
-        if(currentPage>=allPages) $("#next").addClass("disabled").html("下一页");
 
-        if(allPages<7){
-            for(var i = 1;i<=allPages;i++){
-                if(currentPage == i){
-                    //表示当前页，不可点击
-                    $("#nextPage").before('<li class="current">'+i+'</li>');
 
-                }else{
-                    $("#nextPage").before('<li><a href="javascript:changeCurrentPage(this)" aria-label="Page 3">'+i+'</a></li>');
+
+        $(document).ready(function(){
+            getNews(currentType,1);
+            initialisePagination();
+        });
+
+        function initialisePagination(){
+            var url = "/news/getNewsNumByType?type="+currentType;
+            if(isSearch)
+            //如果正在搜索时，
+                url = "/news/getSearchNewsNum?searchContent="+currentSearchContent;
+
+            $.ajax({
+                url: url,
+                type:"get",
+                dataType: "text",
+                success: function(result){
+                    alert(result);
+                    var allPages = parseInt(result)/15;
+                    doInitialisePagination(allPages);
+                },
+                error: function (e) {
+                    alert("错误-分页");
                 }
-            }
-            return ;
+
+            });
         }
-        var starter = -1;
-        var end ;
+        function doInitialisePagination(allPages){
+            /*如果allPages<7,则从1开始，到allPages结束
+            *如果currentPage-3小于等于0m则分页 从1开始到7
+            * 如果currentPage-3大于0，则从currentPagen-3开始到currentPage+3结束
+            * 如果currentPage+3大于allPages,allPages-6开始，allPages
+            * */
+            $(".pagination").empty();
+            $(".pagination").append('<li class="pagination-previous" id="previous"><a href="javascript:previousPage()">上一页</a></li>');
+            $(".pagination").append('<li class="pagination-next" id="next"><a href="javascript:nextPage()">下一页</a></li>');
+            if(currentPage<=1) $("#previous").addClass("disabled").html("上一页");
+
+            if(currentPage>=allPages) $("#next").addClass("disabled").html("下一页");
+
+            if(allPages<7){
+                for(var i = 1;i<=allPages;i++){
+                    if(currentPage == i){
+                        //表示当前页，不可点击
+                        $("#nextPage").before('<li class="current">'+i+'</li>');
+
+                    }else{
+                        $("#nextPage").before('<li><a href="javascript:changeCurrentPage(this)" aria-label="Page 3">'+i+'</a></li>');
+                    }
+                }
+                return ;
+            }
+            var starter = -1;
+            var end ;
             if(currentPage-3 <= 0){
                 starter = 1;
             }else if(currentPage+3<=allPages){
@@ -123,7 +125,7 @@
                     $("#nextPage").before('<li><a href="javascript:changeCurrentPage('+current+')" >'+current+'</a></li>');
                 }
             }
-       }
+        }
         function loadNews(newsList){
 
             $("#content").empty();
@@ -131,51 +133,51 @@
 
             for(var i = 0;i<newsList.length;i++){
 
-                    var news = newsList[i];
+                var news = newsList[i];
 
-                    var div1 = document.createElement("div");
-                    $(div1).addClass(div1Class);
-                    var div2 = document.createElement("div");
-                    $(div2).addClass(div2Class);
-
-
-                    var div3_content = document.createElement("div");
-
-                    var div3_img = document.createElement("div");
-                    if(news.img_url=="" || news.img_url==null){
-                        $(div3_content).addClass("cell small-12 medium-12").css({height:"100%"});
-                        $(div3_img).addClass("cell small-12 medium-12").css({overflow:"hidden"});
-                    }else{
-
-                        $(div3_content).addClass("cell small-9 medium-12").css({height:"100%"});
-                        $(div3_img).addClass("cell small-3 medium-12").css({overflow:"hidden"}).append('<img src="'+news.img_url+'"/>');
-                    }
+                var div1 = document.createElement("div");
+                $(div1).addClass(div1Class);
+                var div2 = document.createElement("div");
+                $(div2).addClass(div2Class);
 
 
-                    var div4_title = document.createElement("div");
-                    $(div4_title).addClass("cell small-9").append('<h4>'+news.title+'</h4>');
+                var div3_content = document.createElement("div");
+
+                var div3_img = document.createElement("div");
+                if(news.img_url=="" || news.img_url==null){
+                    $(div3_content).addClass("cell small-12 medium-12").css({height:"100%"});
+                    $(div3_img).addClass("cell small-12 medium-12").css({overflow:"hidden"});
+                }else{
+
+                    $(div3_content).addClass("cell small-9 medium-12").css({height:"100%"});
+                    $(div3_img).addClass("cell small-3 medium-12").css({overflow:"hidden"}).append('<img src="'+news.img_url+'"/>');
+                }
 
 
-                    var div4_other = document.createElement("div");
-                    $(div4_other).addClass("cell small-3 grid-x");
-
-                    var div5_original = document.createElement("div");
-
-                    $(div5_original).addClass("cell auto").append(news.origin);
-
-                    var div5_time = document.createElement("div");
-                    $(div5_time).addClass("cell auto").append(news.publish_date);
-
-                    $(div1).append(div2);
-                    $(div2).append(div3_img,div3_content);
-                    $(div3_content).append(div4_title,div4_other);
-                    $(div4_other).append(div5_original,div5_time);
-
-                    $(div1).css({borderBottom:"1px solid",borderColor:"#E6E6FA"});
+                var div4_title = document.createElement("div");
+                $(div4_title).addClass("cell small-9").append('<h4>'+news.title+'</h4>');
 
 
-                    $(div1).click({"n_no":news.n_no,"title":news.title,"author":news.author,"news_text":news.news_text},showNewsInfo);
-                    $("#content").append(div1);
+                var div4_other = document.createElement("div");
+                $(div4_other).addClass("cell small-3 grid-x");
+
+                var div5_original = document.createElement("div");
+
+                $(div5_original).addClass("cell auto").append(news.origin);
+
+                var div5_time = document.createElement("div");
+                $(div5_time).addClass("cell auto").append(news.publish_date);
+
+                $(div1).append(div2);
+                $(div2).append(div3_img,div3_content);
+                $(div3_content).append(div4_title,div4_other);
+                $(div4_other).append(div5_original,div5_time);
+
+                $(div1).css({borderBottom:"1px solid",borderColor:"#E6E6FA"});
+
+
+                $(div1).click({"n_no":news.n_no,"title":news.title,"author":news.author,"news_text":news.news_text},showNewsInfo);
+                $("#content").append(div1);
             }
         }
 
@@ -186,7 +188,7 @@
 
 
             $.ajax({
-               url: "/news/findNewsByType",
+                url: "/news/findNewsByType",
                 dataType: "text",
                 data: {"type":type,"currentPage":currentPage,"numPerPage":numPerPage},
                 success: function (result) {
@@ -211,18 +213,18 @@
 
 
             currentPage = t;
-           if(isSearch){
-               doSearchNews(currentSearchContent,currentPage);
-               initialisePagination();
-               return;
-           }
+            if(isSearch){
+                doSearchNews(currentSearchContent,currentPage);
+                initialisePagination();
+                return;
+            }
             //alert(currentPage);
             getNews(currentType,currentPage);
             initialisePagination();
         }
 
         function nextPage(){
-           currentPage++;
+            currentPage++;
 
             if(isSearch){
                 doSearchNews(currentSearchContent,currentPage);
@@ -244,44 +246,59 @@
             initialisePagination();
         }
 
+
+        /**
+         * 用户点击某个新闻时调用
+         * @param d
+         */
         function showNewsInfo(d){
-           $.ajax({
-               url: "/news/loadNewsContent?n_no="+d.data.n_no,
-               dataType: "text",
-              type: "get",
-               success: function (result) {
-                   if(result != ""){
-                       var maxw = document.documentElement.clientWidth;
-                       var maxh = document.documentElement.clientHeight;
-                       $("#news_info").css({"backgroundColor":"white","position":"fixed",width:maxw+"px",height:maxh+"px","top":"50%","left":"50%","margin-left":(-maxw/2)+"px","margin-top":(-maxh/2)+"px"});
-                       $("#news_info").show();
-                       $("html").addClass("unfoces");
-                       $("body").addClass("unfoces");
-                       $("#news_info_title").text(d.data.title);
-                       $("#news_info_author").text(d.data.author);
-                       $("#news_info_content").html(result);
-                   }
-               },
-               error: function (e) {
-                   alert("错误")
-               }
-           });
+
+            startTime = new Date().getTime();
+            alert(startTime);
+
+            $.ajax({
+                url: "/news/loadNewsContent?n_no="+d.data.n_no,
+                dataType: "text",
+                type: "get",
+                success: function (result) {
+                    if(result != ""){
+
+                        currentNews = d.data;//当前新闻被赋值
+                        var maxw = document.documentElement.clientWidth;
+                        var maxh = document.documentElement.clientHeight;
+                        $("#news_info").css({"backgroundColor":"white","position":"fixed",width:maxw+"px",height:maxh+"px","top":"50%","left":"50%","margin-left":(-maxw/2)+"px","margin-top":(-maxh/2)+"px"});
+                        $("#news_info").show();
+                        $("html").addClass("unfoces");
+                        $("body").addClass("unfoces");
+                        $("#news_info_title").text(d.data.title);
+                        $("#news_info_author").text(d.data.author);
+                        $("#news_info_content").html(result);
+
+
+                        //刷新评论区
+                        findCommentByN_no(currentNews.n_no);
+                    }
+                },
+                error: function (e) {
+                    alert("错误")
+                }
+            });
         }
 
 
         function searchNews(){
-           currentPage = 1;
-           isSearch = true;
+            currentPage = 1;
+            isSearch = true;
             currentSearchContent = $("#search_content").val();
-           initialisePagination();
+            initialisePagination();
 
-           doSearchNews(currentSearchCxontent,currentPage);
+            doSearchNews(currentSearchCxontent,currentPage);
 
         }
 
         function doSearchNews(searchContent,currentPage){
 
-           alert("searchContent:"+searchContent+",,currentPage:"+currentPage);
+            alert("searchContent:"+searchContent+",,currentPage:"+currentPage);
             $.ajax({
                 url: "/news/searchNews",
                 dataType: "text",
@@ -292,8 +309,8 @@
                         var newsList = $.parseJSON(result);
                         loadNews(newsList);
 
-
                         isSearch = true;
+
                     }
 
                 },
@@ -307,11 +324,150 @@
 
         }
 
+        /**
+         * 关闭一个新闻：
+         * 关闭时需要向服务器发送  用户对 该新闻的喜好程度
+         */
         function closePanel(){
+
+
+
+            var endTime = new Date().getTime();
+
+            var interval = endTime - startTime;
+
+
+            var length = $("#news_info_content").text().length;
+            var val = interval /length;
+           // alert("endTime:"+endTime+",,间隔："+interval+",,val:"+val);
+
+            //TODO  用户行为采集
+            if(currentUser == null){//基于cookie进行采集
+
+            }else{
+                collectUserAction(currentUser.u_id,currentNews.n_no,val,endTime);
+            }
+
             $('#news_info').fadeOut(500);
             $("html").removeClass("unfoces");
 
             $("body").removeClass("unfoces");
+            //currentNews = null;
+        }
+
+
+        /**
+         * 用户行为采集，将用户的行为信息发送到服务端
+         *
+         **/
+        function collectUserAction(u_id,n_no,val,timestamp){
+
+
+            $.ajax({
+               url: "/recommend/insertInterest",
+                type: "post",
+                data: {"u_id":u_id,"n_no":n_no,"val":val,"timestamp":timestamp},
+                dataType: "text",
+                success: function (result) {
+                    alert("result:"+result);
+                },
+                error: function (e) {
+                   alert("网络错误");
+
+                }
+
+
+            });
+
+        }
+
+        /**
+         * 发表评论
+         */
+        function doComment(){
+
+            if(currentUser==null) {
+                alert("请先登陆");
+                return;
+            }
+
+            var comment_text = $("#comment_textarea").val();
+           // alert(comment_content);
+
+            if(comment_text.length>50) $("#comment_message").text("评论内容过长").css({"color":"red"});
+
+
+            var n_no = currentNews.n_no;
+            var u_id = currentUser.u_id;
+
+            $.ajax({
+               url:"/comment/publishComment",
+               data: {"n_no":n_no,"u_id":u_id,"comment_text":comment_text},
+                type:"post",
+                dataType: "text",
+                success: function (result) {
+                    if(result="true"){
+                        //成功了，1.就关闭评论框，2.然后刷新评论区
+                        $(".close-button").click();
+
+                        //TODO 刷新评论区
+
+                        findCommentByN_no(n_no);
+
+                    }else{
+                        $("#comment_message").text("发表失败，请重试").css({"color":"red"});
+                    }
+                },
+                error: function (e) {
+                   alert("网络错误");
+                }
+            });
+        }
+
+        /**
+         * 根据新闻编号，获取该新闻的所有评论
+         */
+        function findCommentByN_no(n_no){
+            $.ajax({
+                url: "/comment/findCommentInfoByN_no?n_no="+n_no,
+                type: "get",
+                dataType: "text",
+                success: function (result) {
+                    alert("result:"+result);
+
+                    if(result != ""){
+                        //加载新闻数据
+                        var commentInfoList = $.parseJSON(result);
+
+                        $("#comment").empty();
+                        for(var i = 0;i<commentInfoList.length;i++){
+                            var commentInfo = commentInfoList[i];
+
+                            var user = commentInfo.user;
+                            var comment = commentInfo.comment;
+
+                            $("#comment").append('<div class="media-object">\n' +
+                                '            <div class="media-object-section">\n' +
+                                '                <div class="thumbnail">\n' +
+                                '                    <img src="img/yuankui.jpg" style="border-radius: 50%; width: 4em; height: 4em">\n' +
+                                '                </div>' +
+                                '            </div>\n' +
+                                '            <div class="media-object-section">\n' +
+                                '                <span style="font-size: 1.5em;line-height: 1.5em">'+user.name+'</span> <span style="line-height: 1.5em;margin-left: 2em; ">'+comment.comment_date+'</span>\n' +
+                                '                <p>'+comment.comment_text+'</p>\n' +
+                                '            </div>\n' +
+                                '        </div>');
+
+                        }
+
+                    }
+                },
+                error: function (e) {
+                    alert("网络错误");
+                }
+                
+            });
+            
         }
     </script>
 
@@ -331,78 +487,98 @@
     <script>$("#header").load("nav.html")</script>
 </div>
 <!--hah-->
-
-    <div class="grid-container  fluid margin_top" >
-
-        <div id="content" class="grid-x grid-margin-x grid-margin-y">
-
-
-
-            <!--div1-->
-            <div class="cell small-12 medium-4 padding_vertical">
-                <!--div2-->
-                <div class="grid-x">
-                    <!--div3_img-->
-                    <div class="cell small-3 medium-12" style="overflow: hidden;">
-                        <img src="./img/yuankui.jpg" width="100%" />
+<div class="grid-container  fluid margin_top" >
+    <div id="content" class="grid-x grid-margin-x grid-margin-y">
+        <!--div1-->
+        <div class="cell small-12 medium-4 padding_vertical">
+            <!--div2-->
+            <div class="grid-x">
+                <!--div3_img-->
+                <div class="cell small-3 medium-12" style="overflow: hidden;">
+                    <img src="./img/yuankui.jpg" width="100%" />
+                </div>
+                <!--div3_content-->
+                <div class="cell small-9 medium-12" style="height: 100%">
+                    <!--div4_title-->
+                    <div class="cell small-9">
+                        <h3>阿里创投管理公司工商变更：张勇不再担任董事长</h3>
                     </div>
-                    <!--div3_content-->
-                    <div class="cell small-9 medium-12" style="height: 100%">
-                        <!--div4_title-->
-                        <div class="cell small-9">
-                            <h3>阿里创投管理公司工商变更：张勇不再担任董事长</h3>
+                    <!--div4_other-->
+                    <div class="cell small-3 grid-x">
+                        <!--div5_original-->
+                        <div class="cell auto">
+                            阿里新闻
                         </div>
-                        <!--div4_other-->
-                        <div class="cell small-3 grid-x">
-                            <!--div5_original-->
-                            <div class="cell auto">
-                                阿里新闻
-                            </div>
-                            <!--div5_time-->
-                            <div class="cell auto">
-                                12：00
-                            </div>
+                        <!--div5_time-->
+                        <div class="cell auto">
+                            12：00
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
 
-            <nav aria-label="Pagination" class="margin_top">
-                <ul class="pagination">
-                    <li class="pagination-previous disabled" id="previous">上一页</li>
-                    <li class="current">1</li>
-                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 2">2</a></li>
-                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 3">3</a></li>
-                    <li><a href="###" aria-label="Page 4">4</a></li>
-                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 12">12</a></li>
-                    <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 13">13</a></li>
-                    <li class="pagination-next" id="next"><a href="#" aria-label="Next page">下一页</a></li>
-                </ul>
-            </nav>
+        </div>
 
     </div>
-    <div  id="news_info" style="position: fixed; display: none; padding: 1rem;overflow-y: auto;overflow-scrolling: inherit">
-        <div class="text-right" style="position: sticky;position: -webkit-sticky; top: 0px;">
-            <button onclick="closePanel()" class="button success">关闭</button>
-        </div>
-        <h3 id="news_info_title" style="font-weight: bold"></h3>
 
-        <div class="text-right">
-            <kbd id="news_info_author"></kbd>
-        </div>
-        <div id="news_info_content">
+    <nav aria-label="Pagination" class="margin_top">
+        <ul class="pagination">
+            <li class="pagination-previous disabled" id="previous">上一页</li>
+            <li class="current">1</li>
+            <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 2">2</a></li>
+            <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 3">3</a></li>
+            <li><a href="###" aria-label="Page 4">4</a></li>
+            <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 12">12</a></li>
+            <li><a href="javascript:changeCurrentPage(this)" aria-label="Page 13">13</a></li>
+            <li class="pagination-next" id="next"><a href="#" aria-label="Next page">下一页</a></li>
+        </ul>
+    </nav>
 
-
-        </div>
+</div>
+<div  id="news_info" style="position: fixed; display: none; padding: 1rem;overflow-y: auto;overflow-scrolling: inherit">
+    <div class="text-right" style="position: sticky;position: -webkit-sticky; top: 0px;">
+        <button class="button dark" data-open="comment_panel">发表评论</button>
+        <button onclick="closePanel()" class="button success">关闭</button>
     </div>
 
+    <h3 id="news_info_title" style="font-weight: bold"></h3>
 
-    <div id="footer">
-        <script>$("#footer").load("footer.html")</script>
+    <div class="text-right">
+        <kbd id="news_info_author"></kbd>
+    </div>
+    <div id="news_info_content">
+
 
     </div>
+
+    <hr/>
+    <div id="comment">
+
+        <!--评论界面-->
+        <span class="menu-text">暂无评价</span><button class="button dark" data-open="comment_panel">发表评价</button>
+
+    </div>
+
+    <!--模态框,,评论框-->
+    <div class="reveal" id="comment_panel" data-reveal>
+        <h3>请输入评论.</h3>
+
+        <textarea id="comment_textarea" rows="5"></textarea>
+        <button class="button success" onclick="doComment()">发表</button><span id="comment_message"></span>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+
+    </div>
+</div>
+
+
+<div id="footer">
+    <script>$("#footer").load("footer.html")</script>
+
+</div>
 
 </body>
 </html>

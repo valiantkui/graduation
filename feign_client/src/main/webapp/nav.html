@@ -36,22 +36,37 @@
             }
         }
 
-
-
         function checkSession(){
+
             $.ajax({
-               url:"/user/checkSession",
-               type: "get",
-               data: "text",
-               success: function (result) {
-                    alert("checkSession():"+result);
-               } ,
+                url:"/user/getCurrentUser",
+                type: "get",
+                dataType: "text",
+                success: function (result) {
+
+
+                    alert("result:"+result);
+                    if(result == "" || null == result) {
+
+                        // window.location="login.html";
+                        $("#user_info").text("未登录");
+                    }else{
+
+                        currentUser = $.parseJSON(result);
+                        $("#user_info").text($.parseJSON(result).name+" 已登陆");
+
+                    }
+                } ,
                 error: function (e) {
                     alert("网络错误");
                 }
-
             });
         }
+
+
+
+        checkSession();
+
     </script>
 <div class="title-bar" data-responsive-toggle="example-menu" data-hide-for="medium">
     <button class="menu-icon" type="button" data-toggle="example-menu"></button>
@@ -68,7 +83,8 @@
             <li><a href="javascript:changeContent(4);">美食</a></li>
             <li><a href="javascript:changeContent(5);">科技</a></li>
             <li><a href="javascript:changeContent(6);">旅游</a></li>
-            <li><a href="###">登陆</a></li>
+            <li><a href="login.html">登陆</a></li>
+            <li><span id="user_info"></span> </li>
         </ul>
     </div>
     <div class="top-bar-right">

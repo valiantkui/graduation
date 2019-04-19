@@ -1,10 +1,10 @@
 package kui.eureka_recommend;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +13,6 @@ import org.apache.mahout.cf.taste.eval.IRStatistics;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.eval.RecommenderEvaluator;
 import org.apache.mahout.cf.taste.eval.RecommenderIRStatsEvaluator;
-import org.apache.mahout.cf.taste.example.grouplens.GroupLensDataModel;
 import org.apache.mahout.cf.taste.impl.common.FastByIDMap;
 import org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
 import org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
@@ -32,19 +31,18 @@ import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
+import org.apache.mahout.cf.taste.similarity.precompute.example.GroupLensDataModel;
+import org.junit.Test;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-
-import kui.eureka_recommend.entity.Interest;
-import kui.eureka_recommend.service.InterestService;
 
 public class TestCase1 {
 
 	public static void main(String[] args) {
 		System.out.println("main()");
 		try {
-			insertMoviLen();
+			test06();
 	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -81,7 +79,7 @@ public class TestCase1 {
 	 */
 	public static void test02() throws IOException, TasteException {
 		  //准备数据 这里是电影评分数据
-		        File file = new File("D:\\data\\ml-10M100K\\ratings.dat");
+		         File file = new File("D:\\data\\ml-10M100K\\ratings.dat");
 		         //将数据加载到内存中，GroupLensDataModel是针对开放电影评论数据的
 		         DataModel dataModel = new GroupLensDataModel(file);
 		         //计算相似度，相似度算法有很多种，欧几里得、皮尔逊等等。
@@ -146,7 +144,8 @@ public class TestCase1 {
         RecommenderEvaluator evaluator = new AverageAbsoluteDifferenceRecommenderEvaluator();
         RecommenderBuilder builder = new RecommenderBuilder() {
 
-            public Recommender buildRecommender(DataModel dataModel) throws TasteException {
+            @Override
+			public Recommender buildRecommender(DataModel dataModel) throws TasteException {
                 UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
                 UserNeighborhood neighborhood = new NearestNUserNeighborhood(2, similarity, dataModel);
                 return new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
@@ -167,7 +166,8 @@ public class TestCase1 {
         DataModel dataModel = new GroupLensDataModel(file);
         RecommenderIRStatsEvaluator statsEvaluator = new GenericRecommenderIRStatsEvaluator();
         RecommenderBuilder recommenderBuilder = new RecommenderBuilder() {
-            public Recommender buildRecommender(DataModel model) throws TasteException {
+            @Override
+			public Recommender buildRecommender(DataModel model) throws TasteException {
                 UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
                 UserNeighborhood neighborhood = new NearestNUserNeighborhood(4, similarity, model);
                 return new GenericUserBasedRecommender(model, neighborhood, similarity);
@@ -185,83 +185,42 @@ public class TestCase1 {
 	 * 使用jdbcDataModel来连接数据库  做推荐。
 	 * @throws Exception
 	 */
-	
+	@Test
 	public static void timeTest() {
 		Date date = new Date();
+		date.setTime(1555411778898l);
 		
-		date.setTime(1049767738);
-		System.out.println(date);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		
+		System.out.println(sdf.format(date));
 	}
-	public static void insertMoviLen() {
-		InterestService interestService = new InterestService();
-		
-		try {
-			File file = new File("D:\\data\\ml-10M100K\\ratings.dat");
-			FileReader fis = new FileReader(file);
-			
-			BufferedReader br = new BufferedReader(fis);
-			String str = null;
-			while((str=br.readLine()) != null) {
-				String[] arr = str.split("::");
-				
-				//UserID::MovieID::Tag::Timestamp
-				
-				String u_id = arr[0] ;
-				int n_no = Integer.parseInt(arr[1]);
-				int val = Integer.parseInt(arr[2]);
-				long timeStamp = Integer.parseInt(arr[3]);
-				
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				
-				String date = sdf.format(new Date(timeStamp));
-				Interest interest = new Interest();
-				interest.setU_id(u_id);
-				interest.setN_no(n_no);
-				interest.setVal(val);
-				interest.setTimestamp(date);
-				
-				interestService.insertInterest(interest);
-				
-			}
-			
-			
-			
-		
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
 	public static void test06() throws Exception{
-		        MysqlDataSource dataSource = new MysqlDataSource(); 
-		        dataSource.setServerName("localhost"); 
-		        dataSource.setUser("root"); 
-		        dataSource.setPassword("yuankui1209"); 
-		        dataSource.setDatabaseName("mahout"); 
-		                                                                         
-		        JDBCDataModel dataModel = new MySQLJDBCDataModel(dataSource, "intro", "uid", "nno", "val", "time"); 
-		                                                                         
-		        DataModel model = dataModel; 
-		        UserSimilarity similarity=new PearsonCorrelationSimilarity(model); 
-		        UserNeighborhood neighborhood=new NearestNUserNeighborhood(2,similarity,model); 
-		                                                                         
-		        Recommender recommender=new GenericUserBasedRecommender(model,neighborhood,similarity); 
-		                                                                         
-		        List<RecommendedItem> recommendations = recommender.recommend(1, 3); 
-		        
-		        
-		        System.out.println("推荐的内容");
-		        for (RecommendedItem recommendation : recommendations) { 
-		            System.out.println(recommendation); 
-		        } 
-		        
-		        
-		        
-		        
+        MysqlDataSource dataSource = new MysqlDataSource(); 
+        dataSource.setServerName("localhost"); 
+        dataSource.setUser("root"); 
+        dataSource.setPassword("yuankui1209"); 
+        dataSource.setDatabaseName("graduation"); 
+                                                                         
+        JDBCDataModel dataModel = new MySQLJDBCDataModel(dataSource, "interest", "u_id", "n_no", "val", "timestamp"); 
+                
+        System.out.println("开始推荐....");
+       // DataModel model = dataModel; 
+        UserSimilarity similarity=new PearsonCorrelationSimilarity(dataModel); 
+        UserNeighborhood neighborhood=new NearestNUserNeighborhood(2,similarity,dataModel); 
+                  
+        
+        System.out.println("即将推荐...");
+        Recommender recommender=new GenericUserBasedRecommender(dataModel,neighborhood,similarity); 
+        System.out.println("正在推荐...");
+        List<RecommendedItem> recommendations = recommender.recommend(4, 10); 
+        
+        System.out.println("推荐的内容");
+        for (RecommendedItem recommendation : recommendations) { 
+            System.out.println(recommendation); 
+        } 	
+        System.out.println("推荐完成");
 	}
+	
+	
 }

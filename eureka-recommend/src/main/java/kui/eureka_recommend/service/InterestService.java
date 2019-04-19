@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import kui.eureka_recommend.dao.InterestDao;
 import kui.eureka_recommend.entity.Interest;
 
-@Service("interestService")
+@Service
 public class InterestService {
 	
 	@Autowired

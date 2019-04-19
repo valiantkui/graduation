@@ -1,38 +1,23 @@
-server:
- port: 80
- 
- 
- 
+
 spring:
  messages:
   basename: i18n/Messages,i18n/Pages
  datasource:
   type: com.alibaba.druid.pool.DruidDataSource # 配置当前要使用的数据源的操作类型
   driver-class-name: org.gjt.mm.mysql.Driver # 配置MySQL的驱动程序类
-  url: jdbc:mysql://39.105.76.3:3306/graduation?allowMultiQueries=true # 数据库连接地址
+  #url: jdbc:mysql://39.105.76.3:3306/graduation?allowMultiQueries=true # 数据库连接地址
+  url: jdbc:mysql://localhost:3306/graduation?allowMultiQueries=true # 数据库连接地址
   username: root # 数据库用户名
-  password: uAiqwVwjJ8-i # 数据库连接密码
+  #password: uAiqwVwjJ8-i # 数据库连接密码
+  password: yuankui1209 # 数据库连接密码
   dbcp2: # 进行数据库连接池的配置
    min-idle: 5 # 数据库连接池的最小维持连接数
    initial-size: 5 # 初始化提供的连接数
    max-total: 20 # 最大的连接数
    max-wait-millis: 200
-   
-   
-
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    timeout: 5000 #连接超时 毫秒
-    jedis:
-      pool:
-        maxActive: 3
-        maxIdle: 3
-        minIdle: 1
-        maxWait: -1 #连接池最大等行时间 -1没有限制
  
 mybatis:
  #config-location: classpath:mybatis/mybatis.cfg.xml # mybatis配置文件所在路径
- type-aliases-package: kui.eureka_user.entity # 定义所有操作类的别名所在包
+ type-aliases-package: kui.eureka_comment.entity # 定义所有操作类的别名所在包
  mapper-locations: # 所有的mapper映射文件
- - classpath:kui/eureka_user/entity/*.xml
+ - classpath:kui/eureka_comment/entity/*.xml

@@ -9,7 +9,7 @@
 
 <!--由于news_text数据过长，所以不做传输，只有当用户点击该新闻时再次获取news_text字段  -->
 	<insert id="insertInterest" parameterType="kui.eureka_recommend.entity.Interest">
-	  	insert into interest(u_id,n_no,val,date) values(#{u_id},#{n_no},#{val},#{date})
+	  	insert into interest(u_id,n_no,val,timestamp) values(#{u_id},#{n_no},#{val},#{timestamp})
 	</insert>
 </mapper>
 
