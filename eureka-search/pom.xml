@@ -58,14 +58,11 @@
 		    <artifactId>lucene-queryparser</artifactId>
 		    <version>8.0.0</version>
 		</dependency>
-		
 		<dependency>
 		    <groupId>org.apache.lucene</groupId>
 		    <artifactId>lucene-analyzers-smartcn</artifactId>
 		    <version>8.0.0</version>
 		</dependency>
-	
-	  
 		<dependency>
 		    <groupId>org.apache.lucene</groupId>
 		    <artifactId>lucene-analyzers-common</artifactId>

@@ -19,6 +19,8 @@
 		select count(*) from news
 	</select>
 	
+
+	
 	<select id="findNewsByN_no" parameterType="int" resultType="kui.eureka_news.entity.News">
 		select * from news 
 		where n_no = #{n_no}
@@ -44,8 +46,22 @@
 		delete from news order by publish_date 
 		where type = #{type} 
 		limit #{limit}
-	
 	</delete>
+	
+	<select id="findNewsByN_noList" parameterType="java.util.List" resultType="kui.eureka_news.entity.News">
+		select * from news 
+		where n_no in 
+		 <foreach collection="n_noList" index="index" item="n_no" separator="," open="(" close=")">
+			#{n_no}
+		 </foreach>
+	</select>
+	
+	<select id="findTopNNews" parameterType="int" resultType="kui.eureka_news.entity.News">
+	
+		select * from news 
+		order by page_view desc 
+		limit #{num}
+	</select>
 </mapper>
 
 

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import kui.eureka_comment.entity.Comment;
-import kui.eureka_comment.entity.extro.CommentInfo;
 
 @Repository("commentDao")
 public interface CommentDao {

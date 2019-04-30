@@ -2,9 +2,6 @@ package kui.eureka_recommend;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +37,8 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 public class TestCase1 {
 
 	public static void main(String[] args) {
+
+		
 		System.out.println("main()");
 		try {
 			test06();
@@ -49,6 +48,8 @@ public class TestCase1 {
 			e.printStackTrace();
 		}
 	}
+	
+
 	public static void test01() {
 		  FastByIDMap<PreferenceArray> preferences = new FastByIDMap<PreferenceArray>();
 	        PreferenceArray User1Pref = new GenericUserPreferenceArray(2);
@@ -213,7 +214,7 @@ public class TestCase1 {
         System.out.println("即将推荐...");
         Recommender recommender=new GenericUserBasedRecommender(dataModel,neighborhood,similarity); 
         System.out.println("正在推荐...");
-        List<RecommendedItem> recommendations = recommender.recommend(4, 10); 
+        List<RecommendedItem> recommendations = recommender.recommend(2, 10); 
         
         System.out.println("推荐的内容");
         for (RecommendedItem recommendation : recommendations) { 

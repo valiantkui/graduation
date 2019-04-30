@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import kui.eureka_comment.dao.CommentDao;
 import kui.eureka_comment.entity.Comment;
-import kui.eureka_comment.entity.extro.CommentInfo;
 
 @Service
 public class CommentService {

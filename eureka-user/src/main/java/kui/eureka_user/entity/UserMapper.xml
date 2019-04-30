@@ -26,6 +26,12 @@
 			 #{u_id}
 		 </foreach>
 	</select>
+	
+	<select id="findUserByUserId" parameterType="int" resultType="kui.eureka_user.entity.User">
+		select * from user 
+		 where id = #{userId}
+	
+	</select>
 </mapper>
 
 

@@ -70,7 +70,7 @@
                 type:"get",
                 dataType: "text",
                 success: function(result){
-                    alert(result);
+                   // alert(result);
                     var allPages = parseInt(result)/15;
                     doInitialisePagination(allPages);
                 },
@@ -192,6 +192,8 @@
                 dataType: "text",
                 data: {"type":type,"currentPage":currentPage,"numPerPage":numPerPage},
                 success: function (result) {
+
+                   // alert(result);
                     if(result != ""){
                         var newsList = $.parseJSON(result);
                         loadNews(newsList);
@@ -254,7 +256,8 @@
         function showNewsInfo(d){
 
             startTime = new Date().getTime();
-            alert(startTime);
+           //
+            // alert(startTime);
 
             $.ajax({
                 url: "/news/loadNewsContent?n_no="+d.data.n_no,
@@ -298,13 +301,15 @@
 
         function doSearchNews(searchContent,currentPage){
 
-            alert("searchContent:"+searchContent+",,currentPage:"+currentPage);
+
+
+            //alert("searchContent:"+searchContent+",,currentPage:"+currentPage);
             $.ajax({
                 url: "/news/searchNews",
                 dataType: "text",
                 data: {"searchContent":searchContent,"currentPage":currentPage,"numPerPage":numPerPage},
                 success: function (result) {
-                    alert(result);
+                    //alert(result);
                     if(result != ""){
                         var newsList = $.parseJSON(result);
                         loadNews(newsList);
@@ -345,7 +350,7 @@
             if(currentUser == null){//基于cookie进行采集
 
             }else{
-                collectUserAction(currentUser.u_id,currentNews.n_no,val,endTime);
+                collectUserAction(currentUser.id,currentNews.n_no,val,endTime);
             }
 
             $('#news_info').fadeOut(500);
@@ -360,15 +365,16 @@
          * 用户行为采集，将用户的行为信息发送到服务端
          *
          **/
-        function collectUserAction(u_id,n_no,val,timestamp){
+        function collectUserAction(id,n_no,val,timestamp){
 
 
             $.ajax({
                url: "/recommend/insertInterest",
                 type: "post",
-                data: {"u_id":u_id,"n_no":n_no,"val":val,"timestamp":timestamp},
+                data: {"id":id,"n_no":n_no,"val":val,"timestamp":timestamp},
                 dataType: "text",
                 success: function (result) {
+                   if(result != "true")
                     alert("result:"+result);
                 },
                 error: function (e) {
@@ -433,7 +439,7 @@
                 type: "get",
                 dataType: "text",
                 success: function (result) {
-                    alert("result:"+result);
+                    //alert("result:"+result);
 
                     if(result != ""){
                         //加载新闻数据
@@ -469,6 +475,8 @@
             });
             
         }
+
+
     </script>
 
     <style>

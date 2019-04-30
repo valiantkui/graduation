@@ -2,10 +2,19 @@ package kui.eureka_user.entity;
 
 public class User {
 
+	private int id;
 	private String u_id;
 	private String name;
 	private String password;
 	private String interest_label;
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getU_id() {
 		return u_id;
 	}
@@ -32,9 +41,10 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [u_id=" + u_id + ", name=" + name + ", password=" + password + ", interest_label=" + interest_label
-				+ "]";
+		return "User [id=" + id + ", u_id=" + u_id + ", name=" + name + ", password=" + password + ", interest_label="
+				+ interest_label + "]";
 	}
+	
 	
 	
 }

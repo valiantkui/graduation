@@ -41,4 +41,7 @@ public interface UserService {
 	
 	@RequestMapping("user/findUserByU_idList")
 	public List<User> findUserByU_idList(@RequestBody List<String> u_idList);
+
+	@RequestMapping("user/findUserByUserId")
+	public User findUserByUserId(@RequestParam("userId") int userId);
 }

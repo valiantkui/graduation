@@ -2,11 +2,14 @@ package kui.crawlingClient.task;
 
 import java.io.IOException;
 import java.util.Date;
+
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import kui.crawlingClient.service.SohuService;
+import kui.crawlingClient.service.SearchService;
 
 @Component
 public class Scheduling {
@@ -19,6 +22,9 @@ public class Scheduling {
 	
 	@Autowired
 	private SohuService sohuService;
+	
+	@Autowired
+	private SearchService searchService;
 	/**
 	 * 向本机发送阻塞式请求
 	 */
@@ -40,6 +46,8 @@ public class Scheduling {
 			Jsoup.connect("http://localhost:8800/sohu/crawlingScience").ignoreContentType(true).execute();
 			System.out.println("获取旅游的新闻");
 			Jsoup.connect("http://localhost:8800/sohu/crawlingTour").ignoreContentType(true).execute();
+			//更新索引
+			System.out.println("重新创建索引是否成功："+searchService.createIndex());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

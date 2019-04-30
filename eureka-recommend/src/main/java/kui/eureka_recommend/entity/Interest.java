@@ -1,15 +1,19 @@
 package kui.eureka_recommend.entity;                                               
                                                                                    
 public class Interest {                                                            
-	private String u_id;                                                        
+	private int id;                                                        
 	private int n_no;                                                           
 	private float val;                                                          
 	private long timestamp;
-	public String getU_id() {
-		return u_id;
+	
+	
+	
+	
+	public int getId() {
+		return id;
 	}
-	public void setU_id(String u_id) {
-		this.u_id = u_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public int getN_no() {
 		return n_no;
@@ -33,9 +37,9 @@ public class Interest {
 	}
 	@Override
 	public String toString() {
-		return "Interest [u_id=" + u_id + ", n_no=" + n_no + ", val=" + val + ", timestamp=" + timestamp + "]";
-	}                                                          
-	     
+		return "Interest [id=" + id + ", n_no=" + n_no + ", val=" + val + ", timestamp=" + timestamp + "]";
+	}
+	
 	
 	                                                                               
 	                                                                               

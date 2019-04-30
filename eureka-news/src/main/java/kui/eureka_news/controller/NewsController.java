@@ -32,7 +32,7 @@ public class NewsController {
 		return newsService.findAllNews();
 	}
 	
-	@RequestMapping("/insertNewsList")
+	@RequestMapping(value="/insertNewsList",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public boolean insertNewsList(@RequestBody List<News> newsList) {
 		
@@ -42,6 +42,8 @@ public class NewsController {
 	@RequestMapping("/getNewsNumByType")
 	@ResponseBody
 	public int getNewsNumByType(@RequestParam("type") String type) {
+		
+		
 		return newsService.getNewsNumByType(type);
 	}
 	
@@ -50,6 +52,15 @@ public class NewsController {
 	public News findNewsByN_no(@RequestParam("n_no") int n_no) {
 		return newsService.findNewsByN_no(n_no);
 	}
+	
+	@RequestMapping("/findNewsByN_noList")
+	@ResponseBody
+	public List<News> findNewsByN_noList(@RequestBody List<Integer> n_noList){
+		
+		
+		return newsService.findNewsByN_noList(n_noList);
+	}
+	
 	
 	@RequestMapping("/getNewsCount")
 	@ResponseBody
@@ -65,7 +76,20 @@ public class NewsController {
 	@RequestMapping("/deleteNewsByTypeAndNum")
 	@ResponseBody
 	public boolean deleteNewsByTypeAndNum(@RequestParam("type") String type,@RequestParam("limit") int limit) {
+
+		
 		return newsService.deleteNewsByTypeAndNum(type,limit);
 		
+	}
+	
+	/**
+	 * 获取新闻中浏览数最高的N条新闻
+	 * @param num
+	 * @return
+	 */
+	@RequestMapping(value="/findTopNNews",produces="application/json;charset=utf-8")
+	@ResponseBody
+	public List<News> findTopNNews(@RequestParam("num") int num){
+		return newsService.findTopNNews(num);
 	}
 }

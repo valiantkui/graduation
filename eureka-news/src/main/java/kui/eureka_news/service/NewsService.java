@@ -65,5 +65,15 @@ public class NewsService {
 		if(newsDao.deleteNewsByTypeAndNum(type,limit) > 0) return true;
 		return false;
 	}
+
+	public List<News> findNewsByN_noList(List<Integer> n_noList) {
+		
+		return newsDao.findNewsByN_noList(n_noList);
+	}
+
+	public List<News> findTopNNews(int num) {
+		// TODO Auto-generated method stub
+		return newsDao.findTopNNews(num);
+	}
 	
 }

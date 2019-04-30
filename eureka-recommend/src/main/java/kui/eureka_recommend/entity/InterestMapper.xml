@@ -9,8 +9,24 @@
 
 <!--由于news_text数据过长，所以不做传输，只有当用户点击该新闻时再次获取news_text字段  -->
 	<insert id="insertInterest" parameterType="kui.eureka_recommend.entity.Interest">
-	  	insert into interest(u_id,n_no,val,timestamp) values(#{u_id},#{n_no},#{val},#{timestamp})
+	  	insert into interest(id,n_no,val,timestamp) values(#{id},#{n_no},#{val},#{timestamp})
 	</insert>
+	
+	<select id="findAllUserId" resultType="int">
+		select distinct id from interest
+	</select>
+	
+	<select id="findInterestByIdN_no" parameterType="int" resultType="kui.eureka_recommend.entity.Interest">
+		select * from interest 
+		where id = #{id} 
+		and n_no = #{n_no}
+	</select>
+	
+	<update id="updateIterestVal" parameterType="kui.eureka_recommend.entity.Interest" >
+		update interest set val = val + #{val}
+		where id = #{id} 
+		and n_no = #{n_no}
+	</update>
 </mapper>
 
 

@@ -74,6 +74,11 @@ public class UserService {
 	public List<User> findUserByU_idList(List<String> u_idList) {
 		return userDao.findUserByU_idList(u_idList);
 	}
+
+	public User findUserByUserId(int userId) {
+		// TODO Auto-generated method stub
+		return userDao.findUserByUserId(userId);
+	}
 	
 	
 	

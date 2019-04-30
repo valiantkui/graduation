@@ -40,6 +40,8 @@ public class CommentController {
 		List<Comment> commentList = commentService.findCommentByN_no(n_no);
 		System.out.println("commentList:"+commentList);
 		
+		if(commentList == null || commentList.size() == 0) return null;
+		
 		HashSet<String> u_idSet = new HashSet<>();
 		for(Comment c: commentList) {
 			u_idSet.add(c.getU_id());

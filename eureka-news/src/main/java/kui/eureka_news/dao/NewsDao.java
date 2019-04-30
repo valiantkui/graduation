@@ -36,6 +36,7 @@ public interface NewsDao {
 	public int getNewsCount();
 
 	
+	
 	/**
 	 * 将新闻按照日期排序，删除日期最久的若干条指定类型的新闻记录
 	 * @param type 新闻类型
@@ -43,6 +44,10 @@ public interface NewsDao {
 	 * @return 删除的记录条数
 	 */
 	public int deleteNewsByTypeAndNum(@Param("type") String type,@Param("limit") int limit);
+
+	public List<News> findNewsByN_noList(@Param("n_noList") List<Integer> n_noList);
+
+	public List<News> findTopNNews(int num);
 
 	
 }

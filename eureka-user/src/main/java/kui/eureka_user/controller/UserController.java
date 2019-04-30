@@ -30,31 +30,15 @@ public class UserController {
 	@Resource(name="userService")
 	private UserService userService;
 	
-	@RequestMapping("/getCurrentUser")
+	@RequestMapping(value="/getCurrentUser",produces="application/json;charset=utf-8")
 	public User getCurrentUser(HttpServletRequest request) {
 		System.out.println(request);
 
-		HttpSession session = request.getSession();
-		  Enumeration<String> headerNames = request.getHeaderNames();
 		
-		while(headerNames.hasMoreElements()) {
-			String nextElement = headerNames.nextElement();
-			System.out.println("name:"+nextElement+",,value:"+request.getHeader(nextElement));
-		}
+		String sessionId = this.getSessionIdFromRequestHeader(request);
 		
-		
-		String cookie = request.getHeader("cookie");
-		if(cookie == null || "".equals(cookie)) return null;
-		String[] arr = cookie.split(";");
-		if(arr.length < 2) return null;
-		String sessionIdKV = arr[1];
-		
-		if(sessionIdKV == null) return null;
-		String sessionId = sessionIdKV.split("=")[1];
 		String u_id = (String) srt.opsForValue().get(sessionId);
-		//System.out.println("request.SessionId:"+);
 		
-		//System.out.println("sessionId:"+session.getId());
 		System.out.println("u_id:"+u_id);
 		if(u_id==null || "".equals(u_id)) return null;
 		User user = userService.findUserByU_id(u_id);
@@ -79,20 +63,12 @@ public class UserController {
 	@ResponseBody
 	public boolean loginUser(String u_id,String password,HttpServletRequest request) {
 		boolean login = userService.loginUser(u_id, password);
+		System.out.println(u_id+",,,"+password);
 		if(login) {
-			/*session.setAttribute("u_id", u_id);
-			session.setAttribute("password", password);*/
 			
-			//System.out.println(session.getId());
-			//System.out.println("request.SessionId:"+);
-			String cookie = request.getHeader("cookie");
-			if(cookie == null || "".equals(cookie)) return false;
-			String[] arr = cookie.split(";");
-			if(arr.length < 2) return false;
-			String sessionIdKV = arr[1];
+			String sessionId = this.getSessionIdFromRequestHeader(request);
 			
-			if(sessionIdKV == null) return false;
-			String sessionId = sessionIdKV.split("=")[1];
+			System.out.println("sessionId:"+sessionId);
 			srt.opsForValue().set(sessionId, u_id);
 		//	srt.opsForValue().set("password", password);
 			return true;
@@ -102,8 +78,33 @@ public class UserController {
 	@RequestMapping(value="/findUserByU_idList",produces="application/json")
 	@ResponseBody
 	public List<User> findUserByU_idList(@RequestBody List<String> u_idList){
-		
-		
 		return userService.findUserByU_idList(u_idList);
 	}
+	
+	@RequestMapping(value="/findUserByUserId",produces="application/json")
+	@ResponseBody
+	public User findUserByUserId(@RequestParam("userId") int userId) {
+		return userService.findUserByUserId(userId);
+	}
+	
+	
+	private String getSessionIdFromRequestHeader(HttpServletRequest request) {
+		  Enumeration<String> headerNames = request.getHeaderNames();
+			
+			while(headerNames.hasMoreElements()) {
+				String nextElement = headerNames.nextElement();
+				System.out.println("name:"+nextElement+",,value:"+request.getHeader(nextElement));
+			}
+			
+			String cookie = request.getHeader("cookie");
+			if(cookie == null || "".equals(cookie)) return null;
+			String sessionIdKV = cookie.substring(cookie.indexOf("JSESSIONID"));
+			
+			
+			if(sessionIdKV == null) return null;
+			String sessionId = sessionIdKV.split("=")[1];
+			
+			return sessionId;
+	}
+	
 }

@@ -14,4 +14,5 @@ public interface UserDao {
 	public int registerUser(User user);
 	
 	public List<User> findUserByU_idList(@Param("u_idList") List<String> u_idList);
+	public User findUserByUserId(int userId);
 }
