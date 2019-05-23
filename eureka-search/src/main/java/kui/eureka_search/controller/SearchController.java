@@ -81,7 +81,6 @@ public class SearchController {
 				Document document = searcher.doc(docs[i].doc);
 				System.out.print("n_no:" + document.get("n_no") + ",");
 				System.out.println("title:" + document.get("title"));
-
 				News n = new News();
 				n.setN_no(Integer.parseInt(document.get("n_no")));
 				n.setTitle(document.get("title"));
@@ -90,7 +89,6 @@ public class SearchController {
 				n.setType(document.get("type"));
 				n.setImg_url(document.get("img_url"));
 				n.setPublish_date(document.get("publish_date"));
-
 				newsList.add(n);
 			}
 			return newsList;
@@ -137,7 +135,7 @@ public class SearchController {
 		// BooleanQuery bq = new BooleanQuery.Builder().add(bc1).add(bc2).build();
 		BooleanQuery.Builder builder = new BooleanQuery.Builder();
 		for (String sl : searchList) {
-			String[] fields = { "title", "author", "type", "origin" };
+			String[] fields = {"title", "author", "type", "origin" };
 			MultiFieldQueryParser paser = new MultiFieldQueryParser(fields, analyzer);
 			Query query = paser.parse(searchContent);
 			BooleanClause bc = new BooleanClause(query, Occur.SHOULD);

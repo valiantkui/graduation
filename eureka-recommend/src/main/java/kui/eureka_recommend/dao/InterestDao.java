@@ -26,6 +26,8 @@ public interface InterestDao {
 	 * @param interest
 	 */
 	public int updateIterestVal(Interest interest);
+
+	public int insertInterestList(@Param("interestList") List<Interest> interestList);
 	
 	
 }

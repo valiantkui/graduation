@@ -5,11 +5,11 @@ spring:
  datasource:
   type: com.alibaba.druid.pool.DruidDataSource # 配置当前要使用的数据源的操作类型
   driver-class-name: org.gjt.mm.mysql.Driver # 配置MySQL的驱动程序类
-  #url: jdbc:mysql://39.105.76.3:3306/graduation?allowMultiQueries=true # 数据库连接地址
-  url: jdbc:mysql://localhost:3306/graduation?allowMultiQueries=true # 数据库连接地址
+  url: jdbc:mysql://39.105.76.3:3306/graduation?allowMultiQueries=true # 数据库连接地址
+  #url: jdbc:mysql://localhost:3306/graduation?allowMultiQueries=true # 数据库连接地址
   username: root # 数据库用户名
-  #password: uAiqwVwjJ8-i #数据库连接密码
-  password: yuankui1209 #数据库连接密码
+  password: uAiqwVwjJ8-i #数据库连接密码
+  #password: yuankui1209 #数据库连接密码
   dbcp2: # 进行数据库连接池的配置
    min-idle: 5 # 数据库连接池的最小维持连接数
    initial-size: 5 # 初始化提供的连接数

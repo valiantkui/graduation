@@ -14,19 +14,18 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/resource"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_211"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/MavenRepository/redis/clients/jedis/2.9.0/jedis-2.9.0.jar" sourcepath="D:/MavenRepository/redis/clients/jedis/2.9.0/jedis-2.9.0-sources.jar">
+	<classpathentry kind="lib" path="D:/mvnRepo/redis/clients/jedis/3.0.1/jedis-3.0.1.jar" sourcepath="D:/mvnRepo/redis/clients/jedis/3.0.1/jedis-3.0.1-sources.jar">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.archivename" value="jedis-2.9.0.jar"/>
 			<attribute name="maven.groupId" value="redis.clients"/>
 			<attribute name="maven.artifactId" value="jedis"/>
-			<attribute name="maven.version" value="2.9.0"/>
+			<attribute name="maven.version" value="3.0.1"/>
 			<attribute name="maven.scope" value="compile"/>
 		</attributes>
 	</classpathentry>

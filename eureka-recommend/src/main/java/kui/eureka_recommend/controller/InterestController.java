@@ -1,7 +1,10 @@
 package kui.eureka_recommend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,9 +20,7 @@ public class InterestController {
 	 private  InterestService interestService;
 
 	
-	 
 
-	 
 	 @RequestMapping("/insertInterest")
 	 @ResponseBody
 	 public boolean insertInterest(int id,int n_no,float val,long timestamp) {
@@ -31,6 +32,12 @@ public class InterestController {
 		 return interestService.insertInterest(interest);
 	 }
 	 
+	 
+	 @RequestMapping(value="/insertInterestList",produces="application/json")
+	 @ResponseBody
+	 public boolean insertInterestList(@RequestBody List<Interest> interestList) {
+		return interestService.insertInterestList(interestList);
+	 }
 	/* @RequestMapping("/insertMovie")
 	 @ResponseBody
 	  public  boolean insertMovie() {
@@ -62,7 +69,6 @@ public class InterestController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			
 			
 		}
 		return false;

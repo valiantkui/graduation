@@ -34,7 +34,7 @@ public class RecommendController {
 		
 		jedis.select(1);
 		String key = String.valueOf(userId);
-		
+		System.out.println("是否存在key值："+jedis.exists(key));
 		if(jedis.exists(key)) {
 			//表示redis中存在要推荐的内容(userId对应的用户)
 			String valueStr = jedis.get(key);
@@ -46,18 +46,19 @@ public class RecommendController {
 			}
 			return n_noList;
 		}else {
-			List<Integer> n_noList = recommendService.recommendNewsByUserId(userId);
+			List<Integer> n_noList = recommendService.recommendNewsByUserId(userId);	
 			
-			if(n_noList==null || n_noList.size()==0) return null;
+			System.out.println(n_noList);
+			if(n_noList==null || n_noList.size()==0) return null;//如果没有推荐的内容，就返回空
 			System.out.println("推荐的新闻no："+n_noList);
 			String value = "";
 			int len = n_noList.size();
 			for(int i = 0;i<len-1;i++) {
 				value += n_noList.get(i)+"#";
 			}
-			
 			if(len>0) value += n_noList.get(len-1);
 			
+			System.out.println("要写入的key和value为："+key+":"+value);
 			jedis.set(key, value);
 			return n_noList;
 		}

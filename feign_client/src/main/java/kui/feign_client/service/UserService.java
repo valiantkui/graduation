@@ -44,4 +44,8 @@ public interface UserService {
 
 	@RequestMapping("user/findUserByUserId")
 	public User findUserByUserId(@RequestParam("userId") int userId);
+
+
+	@RequestMapping("user/findAllUser")
+	public List<User> findAllUser();
 }

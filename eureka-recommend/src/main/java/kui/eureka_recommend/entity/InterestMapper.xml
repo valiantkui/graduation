@@ -12,6 +12,14 @@
 	  	insert into interest(id,n_no,val,timestamp) values(#{id},#{n_no},#{val},#{timestamp})
 	</insert>
 	
+	<insert id="insertInterestList" parameterType="java.util.List">
+		insert into interest(id,n_no,val,timestamp) 
+		values 
+		<foreach collection="interestList" item="inte" separator="," close=";">
+			(#{inte.id},#{inte.n_no},#{inte.val},#{inte.timestamp})
+		</foreach> 
+	</insert>
+	
 	<select id="findAllUserId" resultType="int">
 		select distinct id from interest
 	</select>
@@ -20,6 +28,10 @@
 		select * from interest 
 		where id = #{id} 
 		and n_no = #{n_no}
+	</select>
+	
+	<select id="findAll" resultType="kui.eureka_recommend.entity.Interest">
+		select * from interest	
 	</select>
 	
 	<update id="updateIterestVal" parameterType="kui.eureka_recommend.entity.Interest" >

@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import kui.feign_client.entity.News;
+import kui.feign_client.entity.Interest;
 
 @FeignClient("service-recommend")
 @Service
@@ -24,4 +25,6 @@ public interface RecommendService {
 	@RequestMapping("recommend/recommendNewsByUserId")
 	public List<Integer> recommendNewsByUserId(@RequestParam("userId") int userId);
 
+	@RequestMapping("interest/insertInterestList")
+	public boolean insertInterestList(@RequestBody List<Interest> interestList);
 }

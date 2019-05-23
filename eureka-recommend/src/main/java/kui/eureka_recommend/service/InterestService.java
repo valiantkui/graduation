@@ -34,4 +34,11 @@ public class InterestService {
 	public List<Integer> findAllUserId() {
 		return interestDao.findAllUserId();
 	}
+
+
+	
+	public boolean insertInterestList(List<Interest> interestList) {
+		// TODO Auto-generated method stub
+		return interestDao.insertInterestList(interestList) > 0;
+	}
 }

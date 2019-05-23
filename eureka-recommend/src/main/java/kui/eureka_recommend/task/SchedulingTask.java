@@ -1,6 +1,8 @@
 package kui.eureka_recommend.task;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
@@ -20,6 +22,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import kui.eureka_recommend.entity.Interest;
 import kui.eureka_recommend.service.InterestService;
+import kui.eureka_recommend.service.RecommendService;
 import redis.clients.jedis.Jedis;
 
 @Component
@@ -28,6 +31,8 @@ public class SchedulingTask {
 	@Autowired
 	private InterestService interestService;
 	
+	@Autowired
+	private RecommendService recommendService;
 	
 	@Autowired
 	private Jedis jedis;
@@ -38,7 +43,7 @@ public class SchedulingTask {
 	 * 2. 将计算结果保存到redis中
 	 * 3. 在保存之前，需要将redis清空
 	 */
-	@Scheduled(fixedRate=21600000)
+	//@Scheduled(fixedRate=21600000)
 	public void task1() {
 		System.out.println("task1----------");
 		
@@ -80,5 +85,32 @@ public class SchedulingTask {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 基于相似用户投票策略推荐  和  基于用户协同过滤推荐的混合实现
+	 * 每隔一小时调度一次
+	 */
+	@Scheduled(fixedRate=21600000)
+	public void task2() {
+		
+		jedis.select(1);
+		Map<Long, List<Long>> allRecommends = recommendService.caculateAllRecommends();
+		
+		Set<Long> keySet = allRecommends.keySet();
+		for(long key: keySet) {
+			String value = "";
+			List<Long> itemIdList = allRecommends.get(key);
+			int len = itemIdList.size();
+			if(len == 0) break;//不写入到redis中
+			
+			for(int j = 0;j<len-1;j++) {
+				value+= itemIdList.get(j)+"#";
+			}
+			value+=itemIdList.get(len-1);
+			
+			jedis.set(key+"", value);
+		}
+		
 	}
 }

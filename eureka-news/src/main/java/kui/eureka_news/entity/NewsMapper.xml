@@ -49,7 +49,7 @@
 	</delete>
 	
 	<select id="findNewsByN_noList" parameterType="java.util.List" resultType="kui.eureka_news.entity.News">
-		select * from news 
+		select n_no,title,author,img_url,type,origin,origin_url,publish_date,page_view from news 
 		where n_no in 
 		 <foreach collection="n_noList" index="index" item="n_no" separator="," open="(" close=")">
 			#{n_no}
@@ -58,7 +58,7 @@
 	
 	<select id="findTopNNews" parameterType="int" resultType="kui.eureka_news.entity.News">
 	
-		select * from news 
+		select n_no,title,author,img_url,type,origin,origin_url,publish_date,page_view from news 
 		order by page_view desc 
 		limit #{num}
 	</select>

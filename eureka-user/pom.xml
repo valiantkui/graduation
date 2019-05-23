@@ -23,7 +23,11 @@
 	</properties>
 
 	<dependencies>
-	
+		<dependency>
+	    <groupId>redis.clients</groupId>
+	    <artifactId>jedis</artifactId>
+	    <version>3.0.1</version>
+	</dependency>
 	
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -68,7 +72,13 @@
 			<optional>true</optional>
 			<scope>true</scope>
 		</dependency>
-		
+
+		<dependency>
+			<artifactId></artifactId>
+		</dependency>
+		<dependency>
+			<artifactId></artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

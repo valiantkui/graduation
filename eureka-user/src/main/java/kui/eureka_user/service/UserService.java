@@ -48,28 +48,19 @@ public class UserService {
 		user.setU_id(u_id);
 		user.setName(name);
 		user.setPassword(password);
-		user.setInterest_label(interest_label);
-		
-		
+		user.setInterest_label(interest_label);		
 		int row = userDao.registerUser(user);
-		
 		System.out.println(row);
 		if(row <= 0) return false;
-		
-		
 		return true;
-		
 	}
 	
 	public boolean loginUser(String u_id,String password) {
 		User user = userDao.findUserById(u_id);
 		if(user==null) return false;
 		if(password.equals(user.getPassword())) return true;
-		
 		return false;
 	}
-
-	
 
 	public List<User> findUserByU_idList(List<String> u_idList) {
 		return userDao.findUserByU_idList(u_idList);
@@ -79,8 +70,10 @@ public class UserService {
 		// TODO Auto-generated method stub
 		return userDao.findUserByUserId(userId);
 	}
-	
-	
-	
+
+	public List<User> findAllUser() {
+		// TODO Auto-generated method stub
+		return userDao.findAllUser();
+	}
 	
 }

@@ -18,6 +18,9 @@
 	
 	</insert>
 	
+	<select id="findAllUser" resultType="kui.eureka_user.entity.User">
+		select * from user
+	</select>
 	
 	<select id="findUserByU_idList" parameterType="java.util.List" resultType="kui.eureka_user.entity.User">
 		select * from user 

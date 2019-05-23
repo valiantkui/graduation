@@ -1,5 +1,7 @@
-package kui.eureka_recommend.entity;                                               
-                                                                                   
+package kui.eureka_recommend.entity;
+
+import java.util.Objects;
+
 public class Interest {                                                            
 	private int id;                                                        
 	private int n_no;                                                           
@@ -34,6 +36,27 @@ public class Interest {
 	}
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(),getN_no());
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Interest other = (Interest) obj;
+		if (id != other.id)
+			return false;
+		if (n_no != other.n_no)
+			return  false;
+		return true;
 	}
 	@Override
 	public String toString() {
