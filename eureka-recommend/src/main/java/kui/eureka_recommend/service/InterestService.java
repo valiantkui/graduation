@@ -23,7 +23,7 @@ public class InterestService {
 		//判断该兴趣是否存在，如果存在则更新那条记录
 		if(interestDao.findInterestByIdN_no(interest.getId(),interest.getN_no()) != null) {
 			//更新数据库
-			return interestDao.updateIterestVal(interest)> 0;
+			return interestDao.updateIterestVal(interest)>0;
 		}else {
 			//如果不存在，就向其添加一条记录
 			return interestDao.insertInterest(interest)>0;
