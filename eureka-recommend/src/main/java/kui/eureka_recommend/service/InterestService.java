@@ -19,6 +19,8 @@ public class InterestService {
 	 * @param interest
 	 * @return
 	 */
+	
+	
 	public boolean insertInterest(Interest interest) {
 		//判断该兴趣是否存在，如果存在则更新那条记录
 		if(interestDao.findInterestByIdN_no(interest.getId(),interest.getN_no()) != null) {
