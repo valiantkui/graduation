@@ -77,6 +77,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>eureka-news</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

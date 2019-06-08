@@ -33,7 +33,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kui.common.entity.News;
+import kui.eureka_search.entity.News;
+
+
 
 @Controller
 @RequestMapping("search")

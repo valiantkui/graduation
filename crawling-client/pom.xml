@@ -72,6 +72,7 @@
 	</dependencyManagement>
 
 	<build>
+	<finalName>crawling-client</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -88,5 +89,4 @@
 		</repository>
 	</repositories>
 
-	<packaging>war</packaging>
 </project>

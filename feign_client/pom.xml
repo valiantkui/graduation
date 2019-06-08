@@ -66,6 +66,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>feign_client</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

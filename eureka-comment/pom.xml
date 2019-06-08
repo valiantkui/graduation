@@ -96,6 +96,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>eureka-comment</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

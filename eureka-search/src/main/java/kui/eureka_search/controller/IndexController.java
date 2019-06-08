@@ -25,7 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kui.common.entity.News;
+import kui.eureka_search.entity.News;
 import kui.eureka_search.tools.DBTools;
 
 @Controller
@@ -61,14 +61,14 @@ public class IndexController {
 		List<News> newsList = new ArrayList<>();
 		try {
 			stat = conn.createStatement();
-			rs = stat.executeQuery("select * from news");
+			rs = stat.executeQuery("select distinct title,n_no,author,img_url,type,origin,origin_url,publish_date,page_view from news");
 			while (rs.next()) {
 				News n = new News();
 				n.setN_no(rs.getInt("n_no"));
 				n.setTitle(rs.getString("title"));
 				n.setAuthor(rs.getString("author"));
 				n.setType(rs.getString("type"));
-				n.setNews_text(rs.getString("news_text"));
+				//n.setNews_text(rs.getString("news_text"));
 				n.setImg_url(rs.getString("img_url"));
 				n.setOrigin(rs.getString("origin"));
 				n.setPublish_date(rs.getString("publish_date"));

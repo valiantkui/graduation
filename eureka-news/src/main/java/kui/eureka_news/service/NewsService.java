@@ -1,6 +1,9 @@
 package kui.eureka_news.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -35,9 +38,43 @@ public class NewsService {
 	 * @return 是否插入成功
 	 */
 	public boolean insertNewsList(List<News> newsList) {
-		return newsDao.insertNewsList(newsList)>0?true:false;
+		
+		
+		newsList = deleteRepeat(newsList);
+		List<News> subList = new ArrayList<>();
+		int num = 0;
+		int index = 0;
+		
+		for(News n: newsList) {
+			if(num++ >= 100) {
+				if(newsDao.insertNewsList(subList)<=0) return false;
+				num=0;
+				subList.clear();
+			}
+			subList.add(n);
+		}
+		return num!=0 && subList.size()>0 && newsDao.insertNewsList(subList)>0?true:false;
 	}
 
+	
+	private List<News> deleteRepeat(List<News> newsList){
+		List<News> newsList2 = new ArrayList<>();
+		
+		List<News> allNewsList = newsDao.findAllNews();
+		
+		Set<String> set = new HashSet<>();
+		for(News n: allNewsList) {
+			set.add(n.getTitle());
+		}
+		for(News n: newsList) {
+			if(!set.contains(n.getTitle())) {
+				newsList2.add(n);
+			}
+		}
+		return newsList2;
+	}
+	
+	
 	public int getNewsNumByType(String type) {
 		// TODO Auto-generated method stub
 		return newsDao.findNewsNumByType(type);
@@ -47,6 +84,10 @@ public class NewsService {
 	public List<News> findAllNews() {
 		// TODO Auto-generated method stub
 		return newsDao.findAllNews();
+	}
+	public List<News> findAllNews2() {
+		// TODO Auto-generated method stub
+		return newsDao.findAllNews2();
 	}
 	
 	public News findNewsByN_no(int n_no) {

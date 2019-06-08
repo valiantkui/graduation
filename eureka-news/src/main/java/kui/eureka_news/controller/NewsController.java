@@ -1,6 +1,9 @@
 package kui.eureka_news.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,9 @@ import kui.eureka_news.service.NewsService;
 public class NewsController {
 
 	
+	private  List<News> list = new ArrayList<>();
+	
+	
 	@Autowired
 	private NewsService newsService;
 	
@@ -24,6 +30,47 @@ public class NewsController {
 	@ResponseBody
 	public List<News> findNewsByType(@RequestParam("type") String type,@RequestParam("currentPage") int currentPage,@RequestParam("numPerPage") int numPerPage){
 		return newsService.findNewsByType(type, currentPage, numPerPage);
+	}
+	
+	
+	
+	@RequestMapping("/quchong")
+	@ResponseBody
+	public boolean deleteChongfu() {
+		
+		List<News> newsList = newsService.findAllNews2();
+		
+		Set<String> set = new HashSet<>();
+		Set<Integer> integerSet = new HashSet<>();
+		for(News n: newsList) {
+			if(!set.contains(n.getTitle())) {
+				
+				set.add(n.getTitle());
+				integerSet.add(n.getN_no());
+			}
+			
+		}
+		
+		for(News n: newsList) {
+			if(integerSet.contains(n.getN_no())) {
+				list.add(n);
+			}
+		}
+		
+		System.out.println();
+		
+		return false;
+	}
+	
+	
+
+	
+	@RequestMapping("/charu")
+	@ResponseBody
+	public boolean charu() {
+		System.out.println(list.size());
+		return newsService.insertNewsList(list);
+		
 	}
 	
 	@RequestMapping("/findAllNews")

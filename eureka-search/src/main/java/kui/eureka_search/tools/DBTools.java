@@ -21,8 +21,8 @@ public class DBTools {
 			Class.forName("com.mysql.jdbc.Driver");
 			// return
 			// DriverManager.getConnection("jdbc:mysql://39.106.124.138:3306/bookshop?characterEncoding=utf8","root","0107");
-			return DriverManager.getConnection("jdbc:mysql://localhost:3306/graduation?characterEncoding=utf8",
-					"root", "yuankui1209");
+			return DriverManager.getConnection("jdbc:mysql://39.105.76.3:3306/graduation?characterEncoding=utf8",
+					"root", "uAiqwVwjJ8-i");
 
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

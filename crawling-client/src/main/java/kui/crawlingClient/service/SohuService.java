@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import kui.common.entity.News;
+import kui.crawlingClient.entity.News;
+
+
 
 @Service
 @FeignClient("service-news")
@@ -22,5 +24,6 @@ public interface SohuService {
 	public int getNewsCount();
 	@RequestMapping(value="news/deleteNewsByTypeAndNum",method=RequestMethod.GET)
 	public boolean deleteNewsByTypeAndNum(@RequestParam("type") String type,@RequestParam("limit") int limit);
+	
 	
 }

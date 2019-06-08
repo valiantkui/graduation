@@ -107,6 +107,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>eureka-recommend</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -49,7 +49,10 @@
 		</dependencies>
 	</dependencyManagement>
 
+
+
 	<build>
+	<finalName>eureka-center</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -23,11 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import kui.common.entity.News;
-import kui.common.entity.News_souhu;
-import kui.common.entity.SohuNBA;
-import kui.common.entity.SohuResult;
-import kui.crawlingClient.global.Global;
+import kui.crawlingClient.entity.News;
+import kui.crawlingClient.entity.News_souhu;
+import kui.crawlingClient.entity.SohuNBA;
+import kui.crawlingClient.entity.SohuResult;
 import kui.crawlingClient.service.SohuService;
 
 

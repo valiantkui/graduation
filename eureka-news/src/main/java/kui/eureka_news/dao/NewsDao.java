@@ -30,6 +30,7 @@ public interface NewsDao {
 	public int findNewsNumByType(String type);
 
 	public List<News> findAllNews();
+	public List<News> findAllNews2();
 
 	public News findNewsByN_no(int n_no);
 

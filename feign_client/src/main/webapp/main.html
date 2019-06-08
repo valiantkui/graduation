@@ -295,7 +295,7 @@
             currentSearchContent = $("#search_content").val();
             initialisePagination();
 
-            doSearchNews(currentSearchCxontent,currentPage);
+            doSearchNews(currentSearchContent,currentPage);
 
         }
 
@@ -357,6 +357,8 @@
             $("html").removeClass("unfoces");
 
             $("body").removeClass("unfoces");
+            
+            $("#comment").empty();//清空评论区面板内容
             //currentNews = null;
         }
 
@@ -440,12 +442,11 @@
                 dataType: "text",
                 success: function (result) {
                     //alert("result:"+result);
-
+					
                     if(result != ""){
+                    	$("#comment").empty();
                         //加载新闻数据
                         var commentInfoList = $.parseJSON(result);
-
-                        $("#comment").empty();
                         for(var i = 0;i<commentInfoList.length;i++){
                             var commentInfo = commentInfoList[i];
 

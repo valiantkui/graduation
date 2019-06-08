@@ -29,7 +29,9 @@
 	<select id="findAllNews" resultType="kui.eureka_news.entity.News">
 		select n_no,title,author,img_url,type,origin,origin_url,publish_date,page_view from news
 	</select>
-	
+	<select id="findAllNews2" resultType="kui.eureka_news.entity.News">
+		select * from news
+	</select>
 	<insert id="insertNewsList" parameterType="java.util.List">
 		insert into news(title,author,news_text,img_url,type,origin,origin_url,publish_date,page_view)
 		values
