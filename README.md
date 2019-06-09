@@ -13,3 +13,4 @@
 |  班级| 4班 |
 
 ![在这里插入图片描述]("https://github.com/valiantkui/graduation/yuankui.jpg"=30x30)
+<img src="./yuankui.jpg" width="30%"/>
