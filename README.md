@@ -12,5 +12,5 @@
 |  专业|计算机科学与技术 |
 |  班级| 4班 |
 
-![在这里插入图片描述]("https://github.com/valiantkui/graduation/yuankui.jpg"#pic_center =30x30)
+![在这里插入图片描述](https://github.com/valiantkui/graduation/yuankui.jpg#pic_center =30x30)
 
